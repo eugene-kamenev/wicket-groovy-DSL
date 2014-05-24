@@ -1,142 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ArtifactManager">
-    <artifact type="war" name="Gradle : wicket-groovy-dsl : wicket-groovy-dsl.war">
-      <output-path>$PROJECT_DIR$/out/artifacts/wicket-groovy-dsl</output-path>
-      <root id="archive" name="wicket-groovy-dsl.war">
-        <element id="javaee-facet-resources" facet="wicket-groovy-dsl/web/Web Gradle : wicket-groovy-dsl.war" />
-        <element id="directory" name="WEB-INF">
-          <element id="directory" name="classes">
-            <element id="module-output" name="wicket-groovy-dsl" />
-          </element>
-          <element id="directory" name="lib">
-            <element id="library" level="project" name="Gradle: slf4j-api-1.6.4" />
-            <element id="library" level="project" name="Gradle: wicket-core-6.15.0" />
-            <element id="library" level="project" name="Gradle: javax.servlet-api-3.0.1" />
-            <element id="library" level="project" name="Gradle: wicket-util-6.15.0" />
-            <element id="library" level="project" name="Gradle: wicket-request-6.15.0" />
-            <element id="library" level="project" name="Gradle: groovy-all-2.3.1" />
-          </element>
-        </element>
-        <element id="directory" name="META-INF">
-          <element id="file-copy" path="$PROJECT_DIR$/out/artifacts/wicket-groovy-dsl/exploded/wicket-groovy-dsl.war/META-INF/MANIFEST.MF" />
-        </element>
-      </root>
-    </artifact>
-    <artifact type="exploded-war" name="Gradle : wicket-groovy-dsl : wicket-groovy-dsl.war (exploded)">
-      <output-path>$PROJECT_DIR$/out/artifacts/wicket-groovy-dsl/exploded/wicket-groovy-dsl.war</output-path>
+    <artifact type="exploded-war" name="examples:war exploded">
+      <output-path>$PROJECT_DIR$/out/artifacts/examples_war_exploded</output-path>
       <root id="root">
-        <element id="javaee-facet-resources" facet="wicket-groovy-dsl/web/Web Gradle : wicket-groovy-dsl.war" />
         <element id="directory" name="WEB-INF">
           <element id="directory" name="classes">
-            <element id="module-output" name="wicket-groovy-dsl" />
-          </element>
-          <element id="directory" name="lib">
-            <element id="library" level="project" name="Gradle: slf4j-api-1.6.4" />
-            <element id="library" level="project" name="Gradle: wicket-core-6.15.0" />
-            <element id="library" level="project" name="Gradle: javax.servlet-api-3.0.1" />
-            <element id="library" level="project" name="Gradle: wicket-util-6.15.0" />
-            <element id="library" level="project" name="Gradle: wicket-request-6.15.0" />
-            <element id="library" level="project" name="Gradle: groovy-all-2.3.1" />
-          </element>
-        </element>
-        <element id="directory" name="META-INF">
-          <element id="file-copy" path="$PROJECT_DIR$/out/artifacts/wicket-groovy-dsl/exploded/wicket-groovy-dsl.war/META-INF/MANIFEST.MF" />
-        </element>
-      </root>
-    </artifact>
-    <artifact type="war" name="Gradle : wicket-groovy-dsl:core : core-1.0.war">
-      <output-path>$PROJECT_DIR$/out/artifacts/core</output-path>
-      <root id="archive" name="core-1.0.war">
-        <element id="javaee-facet-resources" facet="core/web/Web Gradle : core-1.0.war" />
-        <element id="directory" name="WEB-INF">
-          <element id="directory" name="classes">
+            <element id="module-output" name="examples" />
             <element id="module-output" name="core" />
           </element>
           <element id="directory" name="lib">
             <element id="library" level="project" name="Gradle: groovy-all-2.3.1" />
             <element id="library" level="project" name="Gradle: wicket-core-6.15.0" />
-            <element id="library" level="project" name="Gradle: javax.servlet-api-3.0.1" />
             <element id="library" level="project" name="Gradle: slf4j-api-1.6.4" />
             <element id="library" level="project" name="Gradle: wicket-util-6.15.0" />
             <element id="library" level="project" name="Gradle: wicket-request-6.15.0" />
           </element>
         </element>
-        <element id="directory" name="META-INF">
-          <element id="file-copy" path="$PROJECT_DIR$/out/artifacts/core/exploded/core-1.0.war/META-INF/MANIFEST.MF" />
-        </element>
-      </root>
-    </artifact>
-    <artifact type="exploded-war" name="Gradle : wicket-groovy-dsl:core : core-1.0.war (exploded)">
-      <output-path>$PROJECT_DIR$/out/artifacts/core/exploded/core-1.0.war</output-path>
-      <root id="root">
-        <element id="javaee-facet-resources" facet="core/web/Web Gradle : core-1.0.war" />
-        <element id="directory" name="WEB-INF">
-          <element id="directory" name="classes">
-            <element id="module-output" name="core" />
-          </element>
-          <element id="directory" name="lib">
-            <element id="library" level="project" name="Gradle: groovy-all-2.3.1" />
-            <element id="library" level="project" name="Gradle: wicket-core-6.15.0" />
-            <element id="library" level="project" name="Gradle: javax.servlet-api-3.0.1" />
-            <element id="library" level="project" name="Gradle: slf4j-api-1.6.4" />
-            <element id="library" level="project" name="Gradle: wicket-util-6.15.0" />
-            <element id="library" level="project" name="Gradle: wicket-request-6.15.0" />
-          </element>
-        </element>
-        <element id="directory" name="META-INF">
-          <element id="file-copy" path="$PROJECT_DIR$/out/artifacts/core/exploded/core-1.0.war/META-INF/MANIFEST.MF" />
-        </element>
-      </root>
-    </artifact>
-    <artifact type="war" name="Gradle : wicket-groovy-dsl:examples : examples.war">
-      <output-path>$PROJECT_DIR$/out/artifacts/examples</output-path>
-      <root id="archive" name="examples.war">
         <element id="javaee-facet-resources" facet="examples/web/Web Gradle : examples.war" />
-        <element id="directory" name="WEB-INF">
-          <element id="directory" name="classes">
-            <element id="module-output" name="examples" />
-          </element>
-          <element id="directory" name="lib">
-            <element id="library" level="project" name="Gradle: groovy-all-2.3.1" />
-            <element id="library" level="project" name="Gradle: wicket-core-6.15.0" />
-            <element id="library" level="project" name="Gradle: javax.servlet-api-3.0.1" />
-            <element id="library" level="project" name="Gradle: slf4j-api-1.6.4" />
-            <element id="library" level="project" name="Gradle: wicket-util-6.15.0" />
-            <element id="library" level="project" name="Gradle: wicket-request-6.15.0" />
-            <element id="archive" name="wicket-groovy-dsl-core-1.0.jar">
-              <element id="module-output" name="core" />
-            </element>
-          </element>
-        </element>
-        <element id="directory" name="META-INF">
-          <element id="file-copy" path="$PROJECT_DIR$/out/artifacts/examples/exploded/examples.war/META-INF/MANIFEST.MF" />
-        </element>
-      </root>
-    </artifact>
-    <artifact type="exploded-war" name="Gradle : wicket-groovy-dsl:examples : examples.war (exploded)">
-      <output-path>$PROJECT_DIR$/out/artifacts/examples/exploded/examples.war</output-path>
-      <root id="root">
-        <element id="javaee-facet-resources" facet="examples/web/Web Gradle : examples.war" />
-        <element id="directory" name="WEB-INF">
-          <element id="directory" name="classes">
-            <element id="module-output" name="examples" />
-          </element>
-          <element id="directory" name="lib">
-            <element id="library" level="project" name="Gradle: groovy-all-2.3.1" />
-            <element id="library" level="project" name="Gradle: wicket-core-6.15.0" />
-            <element id="library" level="project" name="Gradle: javax.servlet-api-3.0.1" />
-            <element id="library" level="project" name="Gradle: slf4j-api-1.6.4" />
-            <element id="library" level="project" name="Gradle: wicket-util-6.15.0" />
-            <element id="library" level="project" name="Gradle: wicket-request-6.15.0" />
-            <element id="archive" name="wicket-groovy-dsl-core-1.0.jar">
-              <element id="module-output" name="core" />
-            </element>
-          </element>
-        </element>
-        <element id="directory" name="META-INF">
-          <element id="file-copy" path="$PROJECT_DIR$/out/artifacts/examples/exploded/examples.war/META-INF/MANIFEST.MF" />
-        </element>
       </root>
     </artifact>
   </component>
@@ -218,15 +99,6 @@
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.codehaus.groovy/groovy-all/2.3.1/d1c808e43b08c23ed31fac7085791398f951a85c/groovy-all-2.3.1-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Gradle: hamcrest-core-1.3">
-      <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar!/" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b/hamcrest-core-1.3-sources.jar!/" />
-      </SOURCES>
-    </library>
     <library name="Gradle: javax.servlet-api-3.0.1">
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.servlet/javax.servlet-api/3.0.1/6bf0ebb7efd993e222fc1112377b5e92a13b38dd/javax.servlet-api-3.0.1.jar!/" />
@@ -234,15 +106,6 @@
       <JAVADOC />
       <SOURCES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.servlet/javax.servlet-api/3.0.1/1952f91d84016a39e31346c9d18bd8c9c4a128a/javax.servlet-api-3.0.1-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Gradle: junit-4.11">
-      <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.11/4e031bb61df09069aeb2bffb4019e7a5034a4ee0/junit-4.11.jar!/" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.11/28e0ad201304e4a4abf999ca0570b7cffc352c3c/junit-4.11-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Gradle: slf4j-api-1.6.4">
