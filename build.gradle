@@ -1,0 +1,19 @@
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'groovy'
+    apply plugin: 'war'
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+    def groovy = '2.3.1'
+    def wicket = '6.15.0'
+
+    dependencies {
+        compile "org.codehaus.groovy:groovy-all:${groovy}"
+        compile "org.apache.wicket:wicket-core:${wicket}"
+        compile 'javax.servlet:javax.servlet-api:3.0.1'
+    }
+}

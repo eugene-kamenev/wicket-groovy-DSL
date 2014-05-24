@@ -1,0 +1,5 @@
+rootProject.name = 'wicket-groovy-dsl'
+
+include 'examples'
+include 'core'
+
