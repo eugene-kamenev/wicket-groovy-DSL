@@ -1,6 +1,8 @@
 package test.web
 import org.apache.wicket.MarkupContainer
 import org.apache.wicket.ajax.AjaxRequestTarget
+import test.web.components.SimplePanel
+import test.web.components.SimplePanel2
 import wicket.groovy.GroovyDSL
 
 class VariousPage extends TemplatePage {

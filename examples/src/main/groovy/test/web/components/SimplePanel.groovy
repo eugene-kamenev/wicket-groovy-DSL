@@ -1,4 +1,4 @@
-package test.web
+package test.web.components
 import org.apache.wicket.ajax.AjaxRequestTarget
 import org.apache.wicket.ajax.markup.html.AjaxLink
 import org.apache.wicket.markup.html.panel.Panel

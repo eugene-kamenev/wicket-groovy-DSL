@@ -1,4 +1,4 @@
-package test.web
+package test.web.components
 
 import org.apache.wicket.markup.html.list.ListItem
 import org.apache.wicket.markup.html.panel.Panel

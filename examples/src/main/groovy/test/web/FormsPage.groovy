@@ -1,17 +1,21 @@
 package test.web
-
+import org.apache.wicket.markup.html.form.TextField
 import org.apache.wicket.model.CompoundPropertyModel
 import wicket.groovy.GroovyDSL
 
 class FormsPage extends TemplatePage {
-    private Integer counter = 0
+    private Integer sum = 0
+    private Integer first
+    private Integer second
 
     @Override
     protected void onInitialize() {
         super.onInitialize()
         use(GroovyDSL) {
-            def simpleForm = form 'simpleForm', new CompoundPropertyModel(this), [submit: { this.counter++ }]
-            simpleForm.label('counter')
+            def simpleForm = form 'simpleForm', new CompoundPropertyModel(this), [submit: { this.sum = this.first + this.second }]
+            simpleForm << new TextField('first')
+            simpleForm << new TextField('second')
+            simpleForm.label('sum')
         }
     }
 }
