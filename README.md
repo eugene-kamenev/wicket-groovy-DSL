@@ -10,7 +10,7 @@ Versions used:
 
 ## Examples
 
-Later I will provide examples more complex examples. But to understand the concept, I think it is enough
+Later I will provide more complex examples. But to understand the concept, I think it is enough
 
 ##Thanks
 
