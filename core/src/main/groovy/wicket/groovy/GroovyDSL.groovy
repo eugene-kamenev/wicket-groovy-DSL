@@ -38,14 +38,21 @@ class GroovyDSL {
         link
     }
 
-    static <T> Label label(Component parent, String id, IModel<T> model = null, Closure closure = null) {
-        def child = new Label<T>(id, model)
+    static <T> Label label(Component parent, String id, Closure closure = null) {
+        def child = new Label(id)
         parent?.add child
         closure?.call(child)
         child
     }
 
-    static <T> AjaxLink ajaxLink(Component parent, String id, IModel<T> model, Map<String, Closure> overrides = null, Closure closure = null) {
+    static <T> Label label(Component parent, String id, IModel<T> model, Closure closure = null) {
+        def child = new Label(id, model)
+        parent?.add child
+        closure?.call(child)
+        child
+    }
+
+   static <T> AjaxLink ajaxLink(Component parent, String id, IModel<T> model, Map<String, Closure> overrides = null, Closure closure = null) {
         def child = new GroovyAjaxLink(id, model, overrides)
         parent?.add child
         closure?.call(child)
