@@ -14,7 +14,7 @@ Later I will provide more complex examples. But to understand the concept, I thi
 
 ##Thanks
 
-Thanks for great Groovy Community, and especially to Andrey Bloschetsov
+Thanks to great Groovy Community, and especially to Andrey Bloschetsov
 
 ##Development
 DSL is not complete, it is just the attempt to show you the concept.
