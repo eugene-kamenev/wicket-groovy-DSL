@@ -1,10 +1,9 @@
 package wicket.groovy.core
 
-import groovy.transform.CompileStatic
 import org.apache.wicket.markup.html.list.ListItem
 import org.apache.wicket.markup.html.list.ListView
 import org.apache.wicket.model.IModel
-import wicket.groovy.GroovyDSL
+import wicket.groovy.WicketDSL
 import wicket.groovy.core.traits.WicketComponentTrait
 
 class GroovyListView<T> extends ListView<T> implements WicketComponentTrait {
@@ -29,7 +28,7 @@ class GroovyListView<T> extends ListView<T> implements WicketComponentTrait {
 
     @Override
     protected void populateItem(ListItem<T> item) {
-        use(GroovyDSL) {
+        use(WicketDSL) {
             this.closure?.call(item)
         }
     }

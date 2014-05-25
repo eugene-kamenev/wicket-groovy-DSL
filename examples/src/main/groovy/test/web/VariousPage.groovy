@@ -3,7 +3,7 @@ import org.apache.wicket.MarkupContainer
 import org.apache.wicket.ajax.AjaxRequestTarget
 import test.web.components.SimplePanel
 import test.web.components.SimplePanel2
-import wicket.groovy.GroovyDSL
+import wicket.groovy.WicketDSL
 
 class VariousPage extends TemplatePage {
     private int i
@@ -11,7 +11,7 @@ class VariousPage extends TemplatePage {
     @Override
     protected void onInitialize() {
         super.onInitialize()
-        use(GroovyDSL) {
+        use(WicketDSL) {
             div('simpleDiv') { MarkupContainer mk ->
                 mk.ajaxLink('ajaxLink', [click: { AjaxRequestTarget target ->
                     i++

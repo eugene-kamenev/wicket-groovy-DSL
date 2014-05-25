@@ -13,7 +13,7 @@ import org.apache.wicket.markup.html.list.ListView
 import org.apache.wicket.model.IModel
 import wicket.groovy.core.*
 
-class GroovyDSL {
+class WicketDSL {
 
     static MarkupContainer div(Component parent, String id, Closure closure = null) {
         div(parent, id, null, closure)
