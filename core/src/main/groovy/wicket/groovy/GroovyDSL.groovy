@@ -95,7 +95,7 @@ class GroovyDSL {
         image
     }
 
-    static leftShift(Component parent, Component... child) {
+    static leftShift(Component parent, Component child) {
         parent?.add child
     }
 }
