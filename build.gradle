@@ -14,6 +14,7 @@ allprojects {
     dependencies {
         compile "org.codehaus.groovy:groovy-all:${groovy}"
         compile "org.apache.wicket:wicket-core:${wicket}"
+        compile "org.apache.wicket:wicket-devutils:${wicket}"
         compile 'javax.servlet:javax.servlet-api:3.0.1'
     }
 }

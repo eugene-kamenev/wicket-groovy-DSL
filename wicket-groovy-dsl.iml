@@ -19,6 +19,8 @@
     <orderEntry type="library" exported="" name="Gradle: javax.servlet-api-3.0.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: wicket-util-6.15.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: wicket-request-6.15.0" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: wicket-devutils-6.15.0" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: wicket-extensions-6.15.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: groovy-all-2.3.1" level="project" />
   </component>
 </module>

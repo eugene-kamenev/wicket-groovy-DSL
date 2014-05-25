@@ -1,23 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ArtifactManager">
-    <artifact type="exploded-war" name="examples:war exploded">
-      <output-path>$PROJECT_DIR$/out/artifacts/examples_war_exploded</output-path>
-      <root id="root">
+    <artifact type="war" name="Gradle : wicket-groovy-dsl:examples : examples.war">
+      <output-path>$PROJECT_DIR$/out/artifacts/examples</output-path>
+      <root id="archive" name="examples.war">
+        <element id="javaee-facet-resources" facet="examples/web/Web Gradle : examples.war" />
         <element id="directory" name="WEB-INF">
           <element id="directory" name="classes">
             <element id="module-output" name="examples" />
-            <element id="module-output" name="core" />
           </element>
           <element id="directory" name="lib">
-            <element id="library" level="project" name="Gradle: groovy-all-2.3.1" />
             <element id="library" level="project" name="Gradle: wicket-core-6.15.0" />
+            <element id="library" level="project" name="Gradle: javax.servlet-api-3.0.1" />
             <element id="library" level="project" name="Gradle: slf4j-api-1.6.4" />
             <element id="library" level="project" name="Gradle: wicket-util-6.15.0" />
             <element id="library" level="project" name="Gradle: wicket-request-6.15.0" />
+            <element id="archive" name="wicket-groovy-dsl-core-unspecified.jar">
+              <element id="module-output" name="core" />
+            </element>
+            <element id="library" level="project" name="Gradle: wicket-devutils-6.15.0" />
+            <element id="library" level="project" name="Gradle: wicket-extensions-6.15.0" />
+            <element id="library" level="project" name="Gradle: groovy-all-2.3.1" />
           </element>
         </element>
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/out/artifacts/examples/exploded/examples.war/META-INF/MANIFEST.MF" />
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="Gradle : wicket-groovy-dsl:examples : examples.war (exploded)">
+      <output-path>$PROJECT_DIR$/out/artifacts/examples/exploded/examples.war</output-path>
+      <root id="root">
         <element id="javaee-facet-resources" facet="examples/web/Web Gradle : examples.war" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="module-output" name="examples" />
+          </element>
+          <element id="directory" name="lib">
+            <element id="library" level="project" name="Gradle: wicket-core-6.15.0" />
+            <element id="library" level="project" name="Gradle: javax.servlet-api-3.0.1" />
+            <element id="library" level="project" name="Gradle: slf4j-api-1.6.4" />
+            <element id="library" level="project" name="Gradle: wicket-util-6.15.0" />
+            <element id="library" level="project" name="Gradle: wicket-request-6.15.0" />
+            <element id="archive" name="wicket-groovy-dsl-core-unspecified.jar">
+              <element id="module-output" name="core" />
+            </element>
+            <element id="library" level="project" name="Gradle: wicket-devutils-6.15.0" />
+            <element id="library" level="project" name="Gradle: wicket-extensions-6.15.0" />
+            <element id="library" level="project" name="Gradle: groovy-all-2.3.1" />
+          </element>
+        </element>
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/out/artifacts/examples/exploded/examples.war/META-INF/MANIFEST.MF" />
+        </element>
       </root>
     </artifact>
   </component>
@@ -124,6 +159,24 @@
       <JAVADOC />
       <SOURCES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.wicket/wicket-core/6.15.0/da617a71ca2ac0c5af29fdfcdb9b03a5d7f63041/wicket-core-6.15.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: wicket-devutils-6.15.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.wicket/wicket-devutils/6.15.0/20b12a785910e770b1646b29083eee7b1abe99ce/wicket-devutils-6.15.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.wicket/wicket-devutils/6.15.0/e291408c5028532d826a123a159cb6d972f1f4c4/wicket-devutils-6.15.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: wicket-extensions-6.15.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.wicket/wicket-extensions/6.15.0/14a698711bcaf1ce0a616cc71807d2b6e98b0a35/wicket-extensions-6.15.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.wicket/wicket-extensions/6.15.0/73ede2d01e534da61f64762033f0ee7930b4f855/wicket-extensions-6.15.0-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Gradle: wicket-request-6.15.0">
