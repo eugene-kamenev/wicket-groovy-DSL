@@ -4,14 +4,17 @@ import org.apache.wicket.ajax.AjaxRequestTarget
 import test.web.components.SimplePanel
 import test.web.components.SimplePanel2
 import wicket.groovy.WicketDSL
+import wicket.groovy.WicketFormDSL
 
 class VariousPage extends TemplatePage {
     private int i
+    private String juname
+    private String jup
 
     @Override
     protected void onInitialize() {
         super.onInitialize()
-        use(WicketDSL) {
+        use(WicketDSL, WicketFormDSL) {
             div('simpleDiv') { MarkupContainer mk ->
                 mk.ajaxLink('ajaxLink', [click: { AjaxRequestTarget target ->
                     i++
@@ -20,7 +23,8 @@ class VariousPage extends TemplatePage {
                     newPanel = page.get 'replacePanel' replaceWith newPanel
                     target.add(newPanel)
                 }])
-                add(new SimplePanel('replacePanel').setOutputMarkupId(true))
+                this << new SimplePanel('replacePanel').setOutputMarkupId(true)
+
             }
         }
     }

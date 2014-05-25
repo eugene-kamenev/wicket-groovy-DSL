@@ -12,6 +12,8 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink
 import org.apache.wicket.markup.html.list.ListView
 import org.apache.wicket.model.IModel
 import wicket.groovy.core.*
+import wicket.groovy.core.components.GroovyForm
+import wicket.groovy.core.components.GroovyStatelessForm
 
 class WicketDSL {
 
