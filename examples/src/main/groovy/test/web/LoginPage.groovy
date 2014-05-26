@@ -17,9 +17,8 @@ class LoginPage extends TemplatePage {
                 this.juname == this.jup ? info('Login Successful') : error('Login failed')
             }])
             form.field('juname')
-            form.field('jup')
+            form.pfield('jup')
             form << new FeedbackPanel('feedback')
-            this << form
         }
     }
 }

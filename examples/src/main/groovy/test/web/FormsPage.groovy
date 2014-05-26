@@ -1,7 +1,8 @@
 package test.web
-import org.apache.wicket.markup.html.form.TextField
+
 import org.apache.wicket.model.CompoundPropertyModel
 import wicket.groovy.WicketDSL
+import wicket.groovy.WicketFormDSL
 
 class FormsPage extends TemplatePage {
     private Integer sum = 0
@@ -11,10 +12,10 @@ class FormsPage extends TemplatePage {
     @Override
     protected void onInitialize() {
         super.onInitialize()
-        use(WicketDSL) {
+        use(WicketDSL, WicketFormDSL) {
             def simpleForm = form 'simpleForm', new CompoundPropertyModel(this), [submit: { this.sum = this.first + this.second }]
-            simpleForm << new TextField('first')
-            simpleForm << new TextField('second')
+            simpleForm.field('first')
+            simpleForm.field('second')
             simpleForm.label('sum')
         }
     }

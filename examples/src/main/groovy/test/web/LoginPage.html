@@ -7,13 +7,13 @@
 <body>
 <wicket:extend>
     <div align="center"><br/>
-        <div>To Success Login entered username and password must be equal</div><br/>
+        <div>To Success Login please enter equal username and password</div><br/>
         <form wicket:id="login">
             <div wicket:id="feedback"></div>
             <label wicket:for="juname">Username:</label>
             <input wicket:id="juname"/><br/>
             <label wicket:for="jup">Password:</label>
-            <input wicket:id="jup"/><br/>
+            <input wicket:id="jup" type="password"/><br/>
             <input type="submit" value="submit"/>
         </form>
     </div>
