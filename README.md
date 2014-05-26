@@ -50,10 +50,10 @@ Instead of
    add(form);
    ArrayList<String> list = new ArrayList<>();
    list.add("one"); list.add("two"); list.add("three");
-   add(new ListView('listView', list) {
+   add(new ListView("listView", list) {
         @Override
         protected void populateItem(ListItem<T> item) {
-            item.add(new Label('itemLabel', item.getModel()));
+            item.add(new Label("itemLabel", item.getModel()));
         }
    })
 ```
