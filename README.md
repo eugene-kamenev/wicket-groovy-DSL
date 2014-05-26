@@ -33,7 +33,7 @@ Instead of
         @Override
         public boolean isVisible() {
             // just for example :)
-            MyPage.this.input1.equals(MyPage.this.input2);
+            !MyPage.this.input1.equals(MyPage.this.input2);
         }
    }
    form.add(new TextField("input1"));
