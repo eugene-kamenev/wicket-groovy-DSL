@@ -43,7 +43,7 @@ Instead of
 ```
 
 And this is just a small example of usage. Also with an override map (in this example with 'submit' key), you can pass another properties to components, like
-visible, enabled and others.
+visible, enabled and others (take a look at traits wicket/core/traits package).
 
 ##Thanks
 
@@ -54,4 +54,4 @@ DSL is not complete, it is just the attempt to show you the concept.
 Feel free to contact me, to advise me how to make this DSL better.
 
 ##Help
-I need help in testing this DSL, also I need your opinion of this
+I need help in testing this DSL, also I need your opinion on this
