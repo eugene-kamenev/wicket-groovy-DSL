@@ -16,7 +16,7 @@ Later I will provide more complex examples. But to understand the concept, I thi
 ```groovy
 ...
 use(WicketDSL) {
-    def form('wicketForm', new CompoundPropertyModel(this), [submit: { println this.input1 + this.input2 } ])
+    def form('wicketForm', new CompoundPropertyModel(this), [submit: { println this.input1 + this.input2 }, visible: {this.input1 != this.input2} ])
     form.field('input1')
     form.field('input2')
 }
@@ -29,9 +29,14 @@ Instead of
         public void onSubmit(){
             System.out.println(MyPage.this.input1 + MyPage.this.input2);
         }
+        @Override
+        public boolean isVisible() {
+            // just for example :)
+            MyPage.this.input1.equals(MyPage.this.input2);
+        }
    }
-   form.add(new TextField("input1");
-   form.add(new TextField("input2");
+   form.add(new TextField("input1"));
+   form.add(new TextField("input2"));
    add(form);
 ```
 
