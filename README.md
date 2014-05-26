@@ -63,7 +63,8 @@ visible, enabled and others (take a look at traits wicket/core/traits package).
 
 ##Thanks
 
-Thanks to great Groovy Community, and especially to Andrey Bloschetsov
+Thanks to great Groovy Community, and especially to Andrey Bloschetsov.
+Also thanks to Martin Grigorov, for providing post about this project at http://wicketinaction.com
 
 ##Development
 DSL is not complete, it is just the attempt to show you the concept.
