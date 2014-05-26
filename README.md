@@ -9,12 +9,12 @@ Versions used:
 ### 3. Twitter bootstap for some beautify
 
 ## Pimp my library pattern
-This project uses Pipm my library pattern described by Martin Odersky in 2006 year. The Pimp my Library Pattern suggests an approach for extending a library that nearly does everything that you need but just needs a little more. It assumes that you do not have source code for the library of interest.
+This project follows Pipm my library pattern described by Martin Odersky in 2006 year. The Pimp my Library Pattern suggests an approach for extending a library that nearly does everything that you need but just needs a little more. It assumes that you do not have source code for the library of interest.
 Read more here: http://groovy.codehaus.org/Pimp+my+Library+Pattern
 
 ## Examples
-
-Later I will provide more complex examples. But to understand the concept, I think it is enough
+Later I will provide more complex examples. But to understand the concept, I think it is enough.
+At this moment Label, AjaxLink, MarkupContainer, Form, StatelessForm, ListView, Link, PasswordField, TextField are implemented
 
 ##Usage
 ```groovy
@@ -26,6 +26,9 @@ use(WicketDSL, WicketFormDSL) {
 
     form.field 'input1'
     form.field 'input2'
+    ['one', 'two', 'three'].listView('listView') { ListItem item ->
+        item.label 'itemLabel', item.model
+    }
 }
 ```
 Instead of
@@ -45,6 +48,14 @@ Instead of
    form.add(new TextField("input1"));
    form.add(new TextField("input2"));
    add(form);
+   ArrayList<String> list = new ArrayList<>();
+   list.add("one"); list.add("two"); list.add("three");
+   add(new ListView('listView', list) {
+        @Override
+        protected void populateItem(ListItem<T> item) {
+            item.add(new Label('itemLabel', item.getModel()));
+        }
+   })
 ```
 
 And this is just a small example of usage. Also with an override map (in this example with 'submit' key), you can pass another properties to components, like
