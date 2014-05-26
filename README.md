@@ -32,6 +32,7 @@ Instead of
    }
    form.add(new TextField("input1");
    form.add(new TextField("input2");
+   add(form);
 ```
 
 And this is just a small example of usage. Also with an override map (in this example with 'submit' key), you can pass another properties to components, like
