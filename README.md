@@ -20,11 +20,12 @@ Later I will provide more complex examples. But to understand the concept, I thi
 ```groovy
 ...
 use(WicketDSL, WicketFormDSL) {
-    def form('wicketForm', new CompoundPropertyModel(this), [submit: { println this.input1 + this.input2 },
-                                                             visible: {this.input1 != this.input2} ])
-    form.field('input1')
-    form.field('input2')
-    this << form
+    def form = form 'wicketForm', new CompoundPropertyModel(this),
+    [submit: { println this.input1 + this.input2 },
+     visible: { this.input1 != this.input2 } ]
+
+    form.field 'input1'
+    form.field 'input2'
 }
 ```
 Instead of
