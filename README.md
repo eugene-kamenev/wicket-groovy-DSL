@@ -19,6 +19,7 @@ use(WicketDSL) {
     def form('wicketForm', new CompoundPropertyModel(this), [submit: { println this.input1 + this.input2 }, visible: {this.input1 != this.input2} ])
     form.field('input1')
     form.field('input2')
+    this << form
 }
 ```
 Instead of
