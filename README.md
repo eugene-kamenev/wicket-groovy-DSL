@@ -12,6 +12,31 @@ Versions used:
 
 Later I will provide more complex examples. But to understand the concept, I think it is enough
 
+##Usage
+```groovy
+...
+use(WicketDSL) {
+    def form('wicketForm', new CompoundPropertyModel(this), [submit: { println this.input1 + this.input2 } ])
+    form.field('input1')
+    form.field('input2')
+}
+```
+Instead of
+```java
+...
+   Form form = new Form("wicketForm", new CompoundPropertyModel(this)) {
+        @Override
+        public void onSubmit(){
+            System.out.println(MyPage.this.input1 + MyPage.this.input2);
+        }
+   }
+   form.add(new TextField("input1");
+   form.add(new TextField("input2");
+```
+
+And this is just a small example of usage. Also with an override map (in this example with 'submit' key), you can pass another properties to components, like
+visible, enabled and others.
+
 ##Thanks
 
 Thanks to great Groovy Community, and especially to Andrey Bloschetsov
