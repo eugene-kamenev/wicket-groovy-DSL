@@ -8,6 +8,10 @@ Versions used:
 ### 2. Groovy 2.3.1 (Yes, with Traits :)
 ### 3. Twitter bootstap for some beautify
 
+## Pimp my library pattern
+This project uses Pipm my library pattern described by Martin Odersky in 2006 year. The Pimp my Library Pattern suggests an approach for extending a library that nearly does everything that you need but just needs a little more. It assumes that you do not have source code for the library of interest.
+Read more here: http://groovy.codehaus.org/Pimp+my+Library+Pattern
+
 ## Examples
 
 Later I will provide more complex examples. But to understand the concept, I think it is enough
