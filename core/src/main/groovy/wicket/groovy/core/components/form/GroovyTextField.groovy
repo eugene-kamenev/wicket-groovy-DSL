@@ -1,4 +1,4 @@
-package wicket.groovy.core.components
+package wicket.groovy.core.components.form
 
 import org.apache.wicket.markup.html.form.TextField
 import org.apache.wicket.model.IModel

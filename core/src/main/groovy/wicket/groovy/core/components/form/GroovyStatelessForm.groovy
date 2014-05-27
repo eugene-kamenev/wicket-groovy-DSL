@@ -1,4 +1,4 @@
-package wicket.groovy.core.components
+package wicket.groovy.core.components.form
 
 import groovy.transform.CompileStatic
 import org.apache.wicket.markup.html.form.StatelessForm

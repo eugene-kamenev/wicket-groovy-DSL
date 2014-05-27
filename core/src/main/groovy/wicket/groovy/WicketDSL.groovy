@@ -11,9 +11,13 @@ import org.apache.wicket.markup.html.image.Image
 import org.apache.wicket.markup.html.link.BookmarkablePageLink
 import org.apache.wicket.markup.html.list.ListView
 import org.apache.wicket.model.IModel
-import wicket.groovy.core.*
-import wicket.groovy.core.components.GroovyForm
-import wicket.groovy.core.components.GroovyStatelessForm
+import org.apache.wicket.model.LoadableDetachableModel
+import wicket.groovy.core.components.ajax.GroovyAjaxLink
+import wicket.groovy.core.components.basic.GroovyImage
+import wicket.groovy.core.components.basic.GroovyListView
+import wicket.groovy.core.components.basic.GroovyWebMarkupContainer
+import wicket.groovy.core.components.form.GroovyForm
+import wicket.groovy.core.components.form.GroovyStatelessForm
 
 class WicketDSL {
 
@@ -54,7 +58,7 @@ class WicketDSL {
         child
     }
 
-   static <T> AjaxLink ajaxLink(Component parent, String id, IModel<T> model, Map<String, Closure> overrides = null, Closure closure = null) {
+    static <T> AjaxLink ajaxLink(Component parent, String id, IModel<T> model, Map<String, Closure> overrides = null, Closure closure = null) {
         def child = new GroovyAjaxLink(id, model, overrides)
         parent?.add child
         closure?.call(child)
@@ -90,12 +94,23 @@ class WicketDSL {
         listView
     }
 
-    static <T> Image image(Component parent, String id, IModel<T> model = null, Map<String, Closure> overrides = null, Closure closure = null) {
+    static <T> Image image(Component parent, String id, IModel<T> model = null, Map<String, Closure> overrides = null, Closure closure) {
         def image = new GroovyImage<T>(id, model, overrides)
         parent?.add image
         closure?.call(image)
         image
     }
+
+    static LoadableDetachableModel loadableModel(Component parent, Closure closure) {
+        def model = new LoadableDetachableModel() {
+            @Override
+            protected Object load() {
+                closure.call()
+            }
+        }
+        model
+    }
+
 
     static leftShift(Component parent, Component child) {
         parent?.add child

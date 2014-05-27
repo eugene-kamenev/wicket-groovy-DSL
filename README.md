@@ -6,7 +6,8 @@ But with some little, yet powerful Groovy DSL written, we can extend Wicket to s
 Versions used:
 ### 1. Apache Wicket 6.15.0
 ### 2. Groovy 2.3.1 (Yes, with Traits :)
-### 3. Twitter bootstap for some beautify
+### 3. Twitter bootstap for some beautify for examples
+### 4. GORM Standalone module from Grails for examples
 
 ## Pimp my library pattern
 This project follows Pipm my library pattern described by Martin Odersky in 2006 year. The Pimp my Library Pattern suggests an approach for extending a library that nearly does everything that you need but just needs a little more. It assumes that you do not have source code for the library of interest.
@@ -61,6 +62,20 @@ Instead of
 And this is just a small example of usage. Also with an override map (in this example with 'submit' key), you can pass another properties to components, like
 visible, enabled and others (take a look at traits wicket/core/traits package).
 
+##GORM integration
+In example folder there is GORM (orm from Grails) integrated with Apache Wicket and this DSL, take a look! It is very interesting!
+No special components are required :)
+```groovy
+use(WicketDSL) {
+            def listView = Person.findAll([fetch:[department:'eager']]).listView('personList')
+            { ListItem<Person> item ->
+                item.label 'personName', item.model
+                item.label 'department', new PropertyModel(item.model, 'department.title')
+            }
+            bookmarkLink('addPerson', AddPersonPage)
+            this << listView
+        }
+```
 ##Thanks
 
 Thanks to great Groovy Community, and especially to Andrey Bloschetsov.

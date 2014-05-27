@@ -1,4 +1,4 @@
-package wicket.groovy.core
+package wicket.groovy.core.components.basic
 
 import groovy.transform.CompileStatic
 import org.apache.wicket.markup.html.link.Link

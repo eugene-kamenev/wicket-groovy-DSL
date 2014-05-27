@@ -13,6 +13,6 @@ class TestApplication extends WebApplication {
 
     @Override
     Class<? extends Page> getHomePage() {
-        return HomePage
+        HomePage
     }
 }

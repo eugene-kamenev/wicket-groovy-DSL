@@ -1,4 +1,4 @@
-package wicket.groovy.core
+package wicket.groovy.core.components.ajax
 
 import groovy.transform.CompileStatic
 import org.apache.wicket.ajax.markup.html.AjaxLink
