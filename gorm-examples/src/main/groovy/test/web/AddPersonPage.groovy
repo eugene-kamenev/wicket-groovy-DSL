@@ -24,7 +24,7 @@ class AddPersonPage extends TemplatePage {
                     }
                 }
             }])
-            form.field('person.name')
+            form.text('person.name')
             form.dropDown('person.department', departments, [id: 'id', value: 'title'])
 
             def personListModel = loadableModel() {
@@ -36,7 +36,7 @@ class AddPersonPage extends TemplatePage {
                         item.label 'name'
                         item.label 'department.title'
                     }
-            form << new FeedbackPanel('errors')
+            form + new FeedbackPanel('errors')
         }
     }
 

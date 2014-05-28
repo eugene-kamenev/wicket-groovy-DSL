@@ -9,16 +9,21 @@ import org.apache.wicket.markup.html.form.Form
 import org.apache.wicket.markup.html.form.StatelessForm
 import org.apache.wicket.markup.html.image.Image
 import org.apache.wicket.markup.html.link.BookmarkablePageLink
+import org.apache.wicket.markup.html.link.Link
 import org.apache.wicket.markup.html.list.ListView
 import org.apache.wicket.model.IModel
 import org.apache.wicket.model.LoadableDetachableModel
 import wicket.groovy.core.components.ajax.GroovyAjaxLink
 import wicket.groovy.core.components.basic.GroovyImage
+import wicket.groovy.core.components.basic.GroovyLink
 import wicket.groovy.core.components.basic.GroovyListView
 import wicket.groovy.core.components.basic.GroovyWebMarkupContainer
 import wicket.groovy.core.components.form.GroovyForm
 import wicket.groovy.core.components.form.GroovyStatelessForm
 
+/**
+ * @author Eugene Kamenev @eugenekamenev
+ */
 class WicketDSL {
 
     static MarkupContainer div(Component parent, String id, Closure closure = null) {
@@ -65,8 +70,15 @@ class WicketDSL {
         child
     }
 
-    static <T> AjaxLink ajaxLink(Component parent, String id, Map<String, Closure> overrides = null, Closure closure = null) {
+    static <T> AjaxLink<T> ajaxLink(Component parent, String id, Map<String, Closure> overrides = null, Closure closure = null) {
         ajaxLink(parent, id, null, overrides, closure)
+    }
+
+    static <T> Link<T> link(Component parent, String id, IModel<T> model, Map<String, Closure> overrides = null, Closure closure = null) {
+        def child = new GroovyLink(id, model, overrides)
+        parent?.add child
+        closure?.call(child)
+        child
     }
 
     static <T> Form<T> form(Component parent, String id, IModel<T> model = null, Map<String, Closure> overrides = null, Closure closure = null) {
@@ -111,8 +123,12 @@ class WicketDSL {
         model
     }
 
-    static rightShift(MarkupContainer parent, Component child) {
+    static leftShift(MarkupContainer parent, Component child) {
         parent?.addOrReplace child
+    }
+
+    static rightShift(MarkupContainer container, Component another) {
+        container?.replaceWith another
     }
 
     static plus(Component parent, Component child) {

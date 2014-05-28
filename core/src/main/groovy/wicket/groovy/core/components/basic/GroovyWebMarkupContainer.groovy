@@ -5,6 +5,9 @@ import org.apache.wicket.markup.html.WebMarkupContainer
 import org.apache.wicket.model.IModel
 import wicket.groovy.core.traits.WicketComponentTrait
 
+/**
+ * Extended by @eugenekamenev
+ */
 @CompileStatic
 class GroovyWebMarkupContainer<T> extends WebMarkupContainer implements WicketComponentTrait {
 

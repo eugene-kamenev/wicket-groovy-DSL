@@ -5,6 +5,9 @@ import org.apache.wicket.ajax.markup.html.AjaxLink
 import org.apache.wicket.model.IModel
 import wicket.groovy.core.traits.WicketLinkTrait
 
+/**
+ * Extended by @eugenekamenev
+ */
 @CompileStatic
 class GroovyAjaxLink<T> extends AjaxLink<T> implements WicketLinkTrait {
 

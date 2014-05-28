@@ -1,5 +1,8 @@
 package wicket.groovy.core.traits
 
+/**
+ * @author  Eugene Kamenev @eugenekamenev
+ */
 trait WicketFormTrait extends WicketComponentTrait {
     void onSubmit() {
         override?.submit ? override.submit(this) : super.onSubmit()

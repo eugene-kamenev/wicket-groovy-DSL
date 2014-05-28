@@ -8,6 +8,9 @@ import org.apache.wicket.request.resource.IResource
 import org.apache.wicket.request.resource.ResourceReference
 import wicket.groovy.core.traits.WicketComponentTrait
 
+/**
+ * Extended by @eugenekamenev
+ */
 @CompileStatic
 class GroovyImage<T> extends Image implements WicketComponentTrait {
 

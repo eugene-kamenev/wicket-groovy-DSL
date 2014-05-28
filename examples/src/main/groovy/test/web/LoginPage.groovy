@@ -16,9 +16,9 @@ class LoginPage extends TemplatePage {
             def form = statelessForm('login', new CompoundPropertyModel(this), [submit: {
                 this.juname == this.jup ? info('Login Successful') : error('Login failed')
             }])
-            form.field('juname')
-            form.pfield('jup')
-            form << new FeedbackPanel('feedback')
+            form.text('juname')
+            form.password('jup')
+            form + new FeedbackPanel('feedback')
         }
     }
 }

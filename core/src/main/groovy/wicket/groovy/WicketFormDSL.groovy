@@ -1,24 +1,40 @@
 package wicket.groovy
 
 import org.apache.wicket.Component
-import org.apache.wicket.markup.html.form.DropDownChoice
-import org.apache.wicket.markup.html.form.IChoiceRenderer
-import org.apache.wicket.markup.html.form.PasswordTextField
-import org.apache.wicket.markup.html.form.TextField
+import org.apache.wicket.markup.html.form.*
 import org.apache.wicket.model.IModel
-import wicket.groovy.core.components.form.GroovyDropDownChoice
-import wicket.groovy.core.components.form.GroovyPasswordTextField
-import wicket.groovy.core.components.form.GroovyTextField
+import wicket.groovy.core.components.form.*
 
+/**
+ * @author Eugene Kamenev @eugenekamenev
+ */
 class WicketFormDSL {
-    static <T> TextField<T> field(Component parent, String id, IModel<T> model = null, Map<String, Closure> override = null) {
+    static <T> TextField<T> text(Component parent, String id, IModel<T> model = null, Map<String, Closure> override = null) {
         def child = new GroovyTextField<T>(id, model, override)
         parent?.add child
         child
     }
 
-    static PasswordTextField pfield(Component parent, String id, IModel model = null, Map<String, Closure> override = null) {
+    static PasswordTextField password(Component parent, String id, IModel model = null, Map<String, Closure> override = null) {
         def child = new GroovyPasswordTextField(id, model, override)
+        parent?.add child
+        child
+    }
+
+    static EmailTextField email(Component parent, String id, IModel model = null, Map<String, Closure> override = null) {
+        def child = new GroovyEmailField(id, model, override)
+        parent?.add child
+        child
+    }
+
+    static UrlTextField url(Component parent, String id, IModel model = null, Map<String, Closure> override = null) {
+        def child = new GroovyUrlField(id, model, override)
+        parent?.add child
+        child
+    }
+
+    static TextField<Number> number(Component parent, String id, IModel<Number> model = null, Map<String, Closure> override = null) {
+        def child = new GroovyTextField<Number>(id, model, Number, override)
         parent?.add child
         child
     }

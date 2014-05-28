@@ -16,7 +16,7 @@ class HomePage extends TemplatePage {
                 item.label 'department', new PropertyModel(item.model, 'department.title')
             }
             bookmarkLink('addPerson', AddPersonPage)
-            this << listView
+            this + listView
         }
     }
 }

@@ -14,8 +14,8 @@ class FormsPage extends TemplatePage {
         super.onInitialize()
         use(WicketDSL, WicketFormDSL) {
             def simpleForm = form 'simpleForm', new CompoundPropertyModel(this), [submit: { this.sum = this.first + this.second }]
-            simpleForm.field('first')
-            simpleForm.field('second')
+            simpleForm.text('first')
+            simpleForm.text('second')
             simpleForm.label('sum')
         }
     }

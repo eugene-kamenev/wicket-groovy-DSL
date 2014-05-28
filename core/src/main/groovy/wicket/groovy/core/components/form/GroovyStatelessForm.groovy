@@ -5,6 +5,9 @@ import org.apache.wicket.markup.html.form.StatelessForm
 import org.apache.wicket.model.IModel
 import wicket.groovy.core.traits.WicketFormTrait
 
+/**
+ * Extended by @eugenekamenev
+ */
 @CompileStatic
 class GroovyStatelessForm<T> extends StatelessForm<T> implements WicketFormTrait {
     GroovyStatelessForm(String id, IModel<T> model = null, Map<String, Closure> override = null) {

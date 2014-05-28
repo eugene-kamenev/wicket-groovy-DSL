@@ -5,6 +5,9 @@ import org.apache.wicket.markup.html.link.Link
 import org.apache.wicket.model.IModel
 import wicket.groovy.core.traits.WicketLinkTrait
 
+/**
+ * Extended by @eugenekamenev
+ */
 @CompileStatic
 class GroovyLink<T> extends Link<T> implements WicketLinkTrait {
 

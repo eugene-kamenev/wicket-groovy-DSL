@@ -1,5 +1,8 @@
 package wicket.groovy.core.traits
 
+/**
+ * @author  Eugene Kamenev @eugenekamenev
+ */
 trait WicketComponentTrait implements Serializable {
     final Closure closure
     final Map<String, Closure> override

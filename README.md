@@ -4,10 +4,10 @@
 Apache Wicket is great, and Groovy is also great. This project tries to combine the power of both. However, sometimes Apache Wicket code become damn verbose.
 But with some little, yet powerful Groovy DSL written, we can extend Wicket to simplify common tasks, and to delete over 30-40% of verbose code.
 Versions used:
-### 1. Apache Wicket 6.15.0
-### 2. Groovy 2.3.1 (Yes, with Traits :)
-### 3. Twitter bootstap for some beautify for examples
-### 4. GORM Standalone module from Grails for examples
+#### 1. Apache Wicket 6.15.0
+#### 2. Groovy 2.3.1 (Yes, with Traits :)
+#### 3. Twitter bootstap for some beautify for examples
+#### 4. GORM Standalone module from Grails for examples
 
 ## Pimp my library pattern
 This project follows Pipm my library pattern described by Martin Odersky in 2006 year. The Pimp my Library Pattern suggests an approach for extending a library that nearly does everything that you need but just needs a little more. It assumes that you do not have source code for the library of interest.
@@ -23,7 +23,8 @@ At this moment Label, AjaxLink, MarkupContainer, Form, StatelessForm, ListView, 
 use(WicketDSL, WicketFormDSL) {
     def form = form 'wicketForm', new CompoundPropertyModel(this),
     [ submit: { println this.input1 + this.input2 },
-      visible: { this.input1 != this.input2 } ]
+      visible: { this.input1 != this.input2 }
+      error: { println 'Form validation failed'; } ]
 
     form.field 'input1'
     form.field 'input2'
@@ -44,6 +45,10 @@ Instead of
         public boolean isVisible() {
             // just for example :)
             !MyPage.this.input1.equals(MyPage.this.input2);
+        }
+        @Override
+        public void onError() {
+            System.out.println("Form validation failed");
         }
    }
    form.add(new TextField("input1"));
@@ -73,13 +78,14 @@ use(WicketDSL) {
                 item.label 'department', new PropertyModel(item.model, 'department.title')
             }
             bookmarkLink('addPerson', AddPersonPage)
-            this << listView
+            this + listView
         }
 ```
 ##Thanks
 
-Thanks to great Groovy Community, and especially to Andrey Bloschetsov.
-Also thanks to Martin Dashorst, for providing post about this project at http://wicketinaction.com
+### - to great Groovy Community, and especially to Andrey Bloschetsov.
+### - to Martin Dashorst, for post about this project at http://wicketinaction.com
+### - to Martin Grigorov, for providing comments and suggestions, making this project better
 
 ##Development
 DSL is not complete, it is just the attempt to show you the concept.

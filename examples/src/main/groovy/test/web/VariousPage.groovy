@@ -20,10 +20,10 @@ class VariousPage extends TemplatePage {
                     i++
                     def newPanel = (i % 2 == 0) ? new SimplePanel('replacePanel') : new SimplePanel2('replacePanel')
                     newPanel.setOutputMarkupId(true)
-                    newPanel = page.get 'replacePanel' replaceWith newPanel
+                    newPanel = page.get('replacePanel') >> newPanel
                     target.add(newPanel)
                 }])
-                this << new SimplePanel('replacePanel').setOutputMarkupId(true)
+                this + new SimplePanel('replacePanel').setOutputMarkupId(true)
 
             }
         }
