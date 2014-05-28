@@ -31,15 +31,17 @@ use(WicketDSL, WicketFormDSL) {
     [ submit: { println this.input1 + this.input2 },
       visible: { this.input1 != this.input2 }
       error: { println 'Form validation failed'; } ]
-
-    form.field 'input1'
-    form.field 'input2'
+    form.text 'input1'
+    form.text 'input2'
+    form.email 'emailInput'
+    form.url 'urlInput'
+    form.password 'passwordInput'
     ['one', 'two', 'three'].listView('listView') { ListItem item ->
         item.label 'itemLabel', item.model
     }
 }
 ```
-Instead of
+Instead of verbose Java
 ```java
 ...
    Form form = new Form("wicketForm", new CompoundPropertyModel(this)) {
@@ -59,6 +61,9 @@ Instead of
    }
    form.add(new TextField("input1"));
    form.add(new TextField("input2"));
+   form.add(new EmailTextField("emailInput"));
+   form.add(new UrlTextField("urlInput"));
+   form.add(new PasswordTextField("emailInput"));
    add(form);
    ArrayList<String> list = new ArrayList<>();
    list.add("one"); list.add("two"); list.add("three");
