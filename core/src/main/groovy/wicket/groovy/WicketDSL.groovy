@@ -111,8 +111,15 @@ class WicketDSL {
         model
     }
 
+    static rightShift(MarkupContainer parent, Component child) {
+        parent?.addOrReplace child
+    }
 
-    static leftShift(Component parent, Component child) {
+    static plus(Component parent, Component child) {
         parent?.add child
+    }
+
+    static minus(Component parent, Component child) {
+        parent?.remove child
     }
 }
