@@ -9,11 +9,11 @@ Versions used:
 #### 3. Twitter bootstap for some beautify for examples
 #### 4. GORM Standalone module from Grails for examples
 
-Operators overloaded:
-' +  ' => parentComponent.add(child)
-' -  ' => parentComponent.remove(child)
-' >> ' => component.replaceWith(another)
-' << ' => component.addOrReplace(another)
+#### Operators overloaded:
+#####' +  ' => parentComponent.add(child)
+#####' -  ' => parentComponent.remove(child)
+#####' >> ' => component.replaceWith(another)
+#####' << ' => component.addOrReplace(another)
 
 ## Pimp my library pattern
 This project follows Pipm my library pattern described by Martin Odersky in 2006 year. The Pimp my Library Pattern suggests an approach for extending a library that nearly does everything that you need but just needs a little more. It assumes that you do not have source code for the library of interest.
