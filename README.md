@@ -5,7 +5,7 @@ Apache Wicket is great, and Groovy is also great. This project tries to combine 
 But with some little, yet powerful Groovy DSL written, we can extend Wicket to simplify common tasks, and to delete over 30-40% of verbose code.
 Versions used:
 #### 1. Apache Wicket 6.15.0
-#### 2. Groovy 2.3.1 (Yes, with Traits :)
+#### 2. Groovy 2.3.2 (Yes, with Traits :)
 #### 3. Twitter bootstap for some beautify for examples
 #### 4. GORM Standalone module from Grails for examples
 
