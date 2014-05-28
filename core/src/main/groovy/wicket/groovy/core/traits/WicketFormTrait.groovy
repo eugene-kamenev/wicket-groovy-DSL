@@ -8,4 +8,8 @@ trait WicketFormTrait extends WicketComponentTrait {
     void onValidate() {
         override?.validate ? override.validate(this) : super.onValidate()
     }
+
+    void onError() {
+        override?.error ? override.error(this) : super.onError()
+    }
 }
