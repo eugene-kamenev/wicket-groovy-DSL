@@ -1,4 +1,5 @@
 package test.web.components
+
 import org.apache.wicket.ajax.AjaxRequestTarget
 import org.apache.wicket.ajax.markup.html.AjaxLink
 import org.apache.wicket.markup.html.panel.Panel
@@ -10,8 +11,9 @@ class SimplePanel extends Panel {
         super(id)
         use(WicketDSL) {
             ajaxLink('ajaxLink', [click: { AjaxRequestTarget target, AjaxLink link ->
-                target.appendJavaScript('alert(\'how are you?\')') }]) { AjaxLink m ->
-                m.label('label', Model.of('Click Me!'))
+                target.appendJavaScript('alert(\'how are you?\')')
+            }]) { AjaxLink m ->
+                m.label('label', [model: Model.of('Click Me!')])
             }
         }
     }

@@ -14,7 +14,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="Gradle: groovy-all-2.3.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: wicket-core-6.15.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: wicket-devutils-6.15.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: javax.servlet-api-3.0.1" level="project" />
@@ -25,6 +24,7 @@
     <orderEntry type="library" exported="" name="Gradle: wicketstuff-stateless-6.15.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: slf4j-simple-1.6.4" level="project" />
     <orderEntry type="library" exported="" name="Gradle: wicket-6.15.0" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: groovy-all-2.3.2" level="project" />
   </component>
 </module>
 

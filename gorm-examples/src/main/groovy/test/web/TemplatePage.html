@@ -8,10 +8,28 @@
 <div class="container">
     <div align="center">
         <br/>
+
         <h1>
             <img src="wicket-logo.png" width="75px"/>+<img src="groovy-logo.png" width="75px"/></h1><br/><br/>
     </div>
+    <div align="center">
+        <a wicket:id="home" class="btn btn-info">HomePage</a><br/><br/>
+
+        <div>
+            <a wicket:id="addPerson" class="btn btn-default">Manage Persons</a>
+            <a wicket:id="addDepartment" class="btn btn-default">Manage Departments</a>
+        </div>
+    </div>
     <wicket:child/>
+    <wicket:fragment wicket:id="fragment">
+        Persons
+        <div wicket:id="personListView">
+            <h4><span wicket:id="name"></span>
+                <small wicket:id="department.title"></small>&nbsp;&nbsp;
+                <a wicket:id="delete"># Delete</a>
+            </h4>
+        </div>
+    </wicket:fragment>
 </div>
 </body>
 </html>

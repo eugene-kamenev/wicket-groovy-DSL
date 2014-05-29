@@ -11,11 +11,11 @@ import wicket.groovy.WicketDSL
 class NavigationPanel extends Panel {
     NavigationPanel(String id) {
         super(id)
-        use(WicketDSL){
-            bookmarkLink('forms', FormsPage).label('label', Model.of('Forms Example'))
-            bookmarkLink('lists', ListViewPage).label('label', Model.of('ListView Example'))
-            bookmarkLink('various', VariousPage).label('label', Model.of('Various Examples'))
-            bookmarkLink('login', LoginPage).label('label', Model.of('Login Example'))
+        use(WicketDSL) {
+            bookmarkLink('forms', FormsPage).label('label', [model: Model.of('Forms Example')])
+            bookmarkLink('lists', ListViewPage).label('label', [model: Model.of('ListView Example')])
+            bookmarkLink('various', VariousPage).label('label', [model: Model.of('Various Examples')])
+            bookmarkLink('login', LoginPage).label('label', [model: Model.of('Login Example')])
         }
     }
 }

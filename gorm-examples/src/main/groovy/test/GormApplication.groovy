@@ -1,5 +1,4 @@
 package test
-
 import grails.orm.bootstrap.HibernateDatastoreSpringInitializer
 import org.apache.wicket.Page
 import org.apache.wicket.protocol.http.WebApplication

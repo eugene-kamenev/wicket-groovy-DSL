@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<wicket:extend>
+    <div wicket:id="operation">
+
+    </div>
+    <wicket:fragment wicket:id="departmentAdd">
+        <form wicket:id="form">
+            <h2>
+                <small>Enter new department title:</small>
+            </h2>
+            <input type="text" wicket:id="title"/>
+
+            <h3>
+                <small>Select Persons:</small>
+            </h3>
+            <div wicket:id="persons">
+            </div>
+            <input type="submit" value="submit" class="btn btn-default"/>
+        </form>
+    </wicket:fragment>
+    <wicket:fragment wicket:id="department">
+        <h3>Select Department for edit:</h3>
+
+        <div wicket:id="departments">
+            <a wicket:id="link"><span wicket:id="title"></span></a>
+        </div>
+
+        <a wicket:id="createNew"><h3>Or Create New</h3></a>
+    </wicket:fragment>
+</wicket:extend>
+</body>
+</html>

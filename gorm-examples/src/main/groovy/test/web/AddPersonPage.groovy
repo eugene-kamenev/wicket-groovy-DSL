@@ -1,5 +1,5 @@
 package test.web
-import org.apache.wicket.markup.html.list.ListItem
+
 import org.apache.wicket.markup.html.panel.FeedbackPanel
 import org.apache.wicket.model.CompoundPropertyModel
 import org.springframework.validation.ObjectError
@@ -15,7 +15,7 @@ class AddPersonPage extends TemplatePage {
     protected void onInitialize() {
         super.onInitialize()
         use(WicketDSL, WicketFormDSL) {
-            def form = form('personForm', new CompoundPropertyModel(this), [submit: {
+            def form = form('personForm', [model: new CompoundPropertyModel(this), submit: {
                 Person.withTransaction {
                     if (!person.save(insert: true)) {
                         person.errors.allErrors.each { ObjectError e ->
@@ -25,17 +25,8 @@ class AddPersonPage extends TemplatePage {
                 }
             }])
             form.text('person.name')
-            form.dropDown('person.department', departments, [id: 'id', value: 'title'])
-
-            def personListModel = loadableModel() {
-                Person.findAll([fetch: [department: 'eager']])
-            }
-            listView('personList', personListModel, null)
-                    { ListItem<Person> item ->
-                        item.defaultModel = new CompoundPropertyModel(item.model)
-                        item.label 'name'
-                        item.label 'department.title'
-                    }
+            form.dropDown('person.department', [choices: departments, render: [id: 'id', value: 'title']])
+            form + personListFragment()
             form + new FeedbackPanel('errors')
         }
     }

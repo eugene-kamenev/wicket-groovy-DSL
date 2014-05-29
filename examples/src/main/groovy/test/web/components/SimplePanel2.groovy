@@ -9,7 +9,7 @@ class SimplePanel2 extends Panel {
         super(id)
         use(WicketDSL) {
             this + ['one', 'two', 'three'].listView('listView') { ListItem item ->
-                item.label('label', item.model)
+                item.label('label', [model: item.model])
             }
         }
     }

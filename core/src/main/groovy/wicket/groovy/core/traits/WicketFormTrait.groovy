@@ -1,18 +1,20 @@
 package wicket.groovy.core.traits
 
+import wicket.groovy.WicketDSL
+
 /**
- * @author  Eugene Kamenev @eugenekamenev
+ * @author Eugene Kamenev @eugenekamenev
  */
 trait WicketFormTrait extends WicketComponentTrait {
     void onSubmit() {
-        override?.submit ? override.submit(this) : super.onSubmit()
+        override?.submit ? use(WicketDSL) { override.submit(this) } : super.onSubmit()
     }
 
     void onValidate() {
-        override?.validate ? override.validate(this) : super.onValidate()
+        override?.validate ? use(WicketDSL) { override.validate(this) } : super.onValidate()
     }
 
     void onError() {
-        override?.error ? override.error(this) : super.onError()
+        override?.error ? use(WicketDSL) { override.error(this) } : super.onError()
     }
 }

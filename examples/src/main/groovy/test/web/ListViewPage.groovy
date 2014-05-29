@@ -7,7 +7,7 @@ class ListViewPage extends TemplatePage {
     ListViewPage() {
         use(WicketDSL) {
             this + ['one', 'two', 'three', 'four'].listView('listView') { ListItem item ->
-                item.label 'label', item.model
+                item.label 'label', [model: item.model]
             }
         }
     }

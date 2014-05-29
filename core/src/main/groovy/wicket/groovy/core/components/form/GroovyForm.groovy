@@ -11,7 +11,12 @@ import wicket.groovy.core.traits.WicketFormTrait
 @CompileStatic
 class GroovyForm<T> extends Form<T> implements WicketFormTrait {
 
-    GroovyForm(String id, IModel<T> model = null, Map<String, Closure> override = null) {
+    GroovyForm(String id, Map<String, Closure> override = null) {
+        super(id)
+        this.override = override
+    }
+
+    GroovyForm(String id, IModel<T> model, Map<String, Closure> override = null) {
         super(id, model)
         this.override = override
     }

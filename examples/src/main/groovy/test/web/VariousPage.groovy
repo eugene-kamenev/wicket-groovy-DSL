@@ -15,7 +15,8 @@ class VariousPage extends TemplatePage {
     protected void onInitialize() {
         super.onInitialize()
         use(WicketDSL, WicketFormDSL) {
-            div('simpleDiv') { MarkupContainer mk ->
+            def replacePanel = new SimplePanel('replacePanel').setOutputMarkupId(true)
+            div('simpleDiv', [:]) { MarkupContainer mk ->
                 mk.ajaxLink('ajaxLink', [click: { AjaxRequestTarget target ->
                     i++
                     def newPanel = (i % 2 == 0) ? new SimplePanel('replacePanel') : new SimplePanel2('replacePanel')
@@ -23,8 +24,7 @@ class VariousPage extends TemplatePage {
                     newPanel = page.get('replacePanel') >> newPanel
                     target.add(newPanel)
                 }])
-                this + new SimplePanel('replacePanel').setOutputMarkupId(true)
-
+                this + replacePanel
             }
         }
     }

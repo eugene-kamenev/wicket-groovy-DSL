@@ -13,7 +13,7 @@ class LoginPage extends TemplatePage {
     protected void onInitialize() {
         super.onInitialize()
         use(WicketDSL, WicketFormDSL) {
-            def form = statelessForm('login', new CompoundPropertyModel(this), [submit: {
+            def form = statelessForm('login', [model: new CompoundPropertyModel(this), submit: {
                 this.juname == this.jup ? info('Login Successful') : error('Login failed')
             }])
             form.text('juname')

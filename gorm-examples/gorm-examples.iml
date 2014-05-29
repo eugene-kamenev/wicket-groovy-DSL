@@ -33,7 +33,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="core" exported="" />
     <orderEntry type="library" exported="" name="Gradle: wicket-core-6.15.0" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: groovy-all-2.3.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: wicketstuff-stateless-6.15.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: wicket-devutils-6.15.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: javax.servlet-api-3.0.1" level="project" />
@@ -82,6 +81,8 @@
     <orderEntry type="library" exported="" name="Gradle: spring-jdbc-3.2.8.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-orm-3.2.8.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-web-3.2.9.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: groovy-all-2.3.2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: mysql-connector-java-5.1.30" level="project" />
   </component>
 </module>
 
