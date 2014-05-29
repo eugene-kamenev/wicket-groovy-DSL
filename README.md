@@ -21,7 +21,7 @@ Read more here: http://groovy.codehaus.org/Pimp+my+Library+Pattern
 
 ## Examples
 Later I will provide more complex examples. But to understand the concept, I think it is enough.
-At this moment Label, AjaxLink, MarkupContainer, Form, StatelessForm, ListView, Link, BookmarkableLink, PasswordField, EmailTextField, UrlTextField, TextField for Numbers, TextField, DropDownChoice (for Entities) with ChoiceRenderer are implemented
+At this moment Label, AjaxLink, MarkupContainer, Form, StatelessForm, ListView, Link, BookmarkableLink, PasswordField, EmailTextField, UrlTextField, TextField for Numbers, TextField, DropDownChoice with ChoiceRenderer, Fragment, CheckBoxMultipleChoice are implemented
 
 ##Usage
 ```groovy
