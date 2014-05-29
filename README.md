@@ -27,8 +27,8 @@ At this moment Label, AjaxLink, MarkupContainer, Form, StatelessForm, ListView, 
 ```groovy
 ...
 use(WicketDSL, WicketFormDSL) {
-    def form = form 'wicketForm', new CompoundPropertyModel(this),
-    [ submit: { println this.input1 + this.input2 },
+    def form = form 'wicketForm', [model: new CompoundPropertyModel(this),
+      submit: { println this.input1 + this.input2 },
       visible: { this.input1 != this.input2 }
       error: { println 'Form validation failed'; } ]
     form.text 'input1'
@@ -83,7 +83,7 @@ In example folder there is GORM (orm from Grails) integrated with Apache Wicket 
 No special components are required :)
 ```groovy
 use(WicketDSL) {
-            def listView = Person.findAll([fetch:[department:'eager']]).listView('personList')
+            def listView = Person.findAll().listView('personList')
             { ListItem<Person> item ->
                 item.label 'personName', item.model
                 item.label 'department', new PropertyModel(item.model, 'department.title')
