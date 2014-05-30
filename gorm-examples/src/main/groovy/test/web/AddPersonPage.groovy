@@ -1,5 +1,4 @@
 package test.web
-
 import org.apache.wicket.markup.html.panel.FeedbackPanel
 import org.apache.wicket.model.CompoundPropertyModel
 import org.springframework.validation.ObjectError

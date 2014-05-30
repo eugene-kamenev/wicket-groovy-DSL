@@ -8,10 +8,10 @@ class Person implements Serializable {
     String name
     static belongsTo = [department: Department]
 
-    static fetchMode = [department: 'eager']
+  /*  static fetchMode = [department: 'eager']*/
 
     static mapping = {
-        department lazy: false
+/*        department lazy: false*/
     }
     static constraints = {
         department nullable: true

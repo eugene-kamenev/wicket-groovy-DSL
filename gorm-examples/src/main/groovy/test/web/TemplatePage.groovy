@@ -33,7 +33,7 @@ abstract class TemplatePage extends WebPage {
     public Fragment personListFragment() {
         def fragment = WicketDSL.fragment(null, 'persons', 'fragment', [provider: this]) { Fragment fr ->
             use(WicketDSL, WicketFormDSL) {
-                fr.listView('personListView', [model: loadModel { Person.findAll() }])
+                fr.listView('personListView', [model: loadModel { Person.list([fetch: [department: 'join']]) }])
                         { ListItem<Person> item ->
                             item.defaultModel = new CompoundPropertyModel<Person>(item.getModel())
                             item.label 'name'

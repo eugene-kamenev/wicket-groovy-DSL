@@ -9,9 +9,9 @@ class Department implements Serializable {
     String title
     Set<Person> persons = new HashSet<>()
     static hasMany = [persons: Person]
-    static fetchMode = [persons: 'eager']
+/*    static fetchMode = [persons: 'eager']*/
 
     static mapping = {
-        persons lazy: false
+  /*      persons lazy: false*/
     }
 }

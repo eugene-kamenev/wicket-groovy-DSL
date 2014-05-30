@@ -26,6 +26,8 @@ class GormApplication extends WebApplication {
         persons2*.save(insert: true)
     }
 
+
+
     @Override
     Class<? extends Page> getHomePage() {
         HomePage
@@ -35,7 +37,7 @@ class GormApplication extends WebApplication {
         def init = new HibernateDatastoreSpringInitializer('test.domain')
         def dataSource = new DriverManagerDataSource("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", 'sa', '')
         dataSource.setDriverClassName(Driver.name)
-        init.setConfiguration(new Properties(['hibernate.hbm2ddl.auto': 'create']))
+        init.setConfiguration(new Properties(['hibernate.hbm2ddl.auto': 'create', 'hibernate.flushMode':'manual']))
         init.configureForDataSource(dataSource)
     }
 }

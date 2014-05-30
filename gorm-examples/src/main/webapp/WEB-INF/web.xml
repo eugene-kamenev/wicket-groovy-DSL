@@ -4,6 +4,7 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 		  http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
+
     <filter>
         <filter-name>GormApp</filter-name>
         <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>

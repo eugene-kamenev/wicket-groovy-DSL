@@ -18,7 +18,7 @@ class AddDepartmentPage extends TemplatePage {
         super.onInitialize()
         use(WicketDSL, WicketFormDSL) {
             fragment('operation', 'department') {
-                it + Department.findAll().listView('departments', [visible: { true }]) {
+                it + departments.listView('departments', [visible: { true }]) {
                     ListItem<Department> item ->
                         item.ajaxLink('link', [model: item.model, click: {
                             it.add page.get('operation') >> department(item.modelObject)
@@ -38,29 +38,36 @@ class AddDepartmentPage extends TemplatePage {
                 def persons = department.persons.collect { it }
                 def form = fr.form 'form', [model : new CompoundPropertyModel(department),
                                             submit: { Form<Department> f ->
-                                                Department.withTransaction {
-                                                    def d = f.modelObject
-                                                    d.persons*.department = d
-                                                    persons.each { p ->
-                                                        if (!d.persons.contains(p)) {
-                                                            p.department = null
-                                                            p.merge()
-                                                        }
-                                                    }
-                                                    if (d.id) {
-                                                        d.merge(flush: true)
-                                                    } else {
-                                                        d.save(insert: true)
-                                                    }
-                                                }
+                                                saveDepartment(f.modelObject, persons)
                                                 throw new RestartResponseException(HomePage)
                                             }]
                 form.text('title')
-                form.checkChoices('persons', [choices: loadModel { Person.findAll() },
+                form.checkChoices('persons', [choices: loadModel { Person.findAll([fetch: [department: 'join']]) },
                                               render : [id: 'id', value: 'name']])
             }
             fr.outputMarkupId = true
         }
         fragment
+    }
+
+    static void saveDepartment(Department d, List<Person> persons) {
+        Department.withTransaction {
+            d.persons*.department = d
+            persons.each { p ->
+                if (!d.persons.contains(p)) {
+                    p.department = null
+                    p.merge()
+                }
+            }
+            if (d.id) {
+                d.merge(flush: true)
+            } else {
+                d.save(insert: true)
+            }
+        }
+    }
+
+    static List getDepartments() {
+        Department.list(fetch: [persons: 'eager'])
     }
 }
