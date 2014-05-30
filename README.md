@@ -93,7 +93,7 @@ use(WicketDSL) {
         }
 ```
 ```groovy
-use(WicketDSL) {
+use(WicketDSL, WicketFormDSL) {
             def form = form 'person', [model:new CompoundPropertyModel(new Person())
                                        submit: { Person.withTransaction {
                                         it.modelObject.save(flush:true) }
