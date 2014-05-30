@@ -92,6 +92,19 @@ use(WicketDSL) {
             this + listView
         }
 ```
+```groovy
+use(WicketDSL) {
+            def form = form 'person', [model:new CompoundPropertyModel(new Person())
+                                       submit: { Person.withTransaction {
+                                        it.modelObject.save(flush:true) }
+                                       }]
+            form.text 'firstName'
+            form.text 'lastName'
+            form.password 'password'
+            form.url 'webSite'
+            this + form
+        }
+```
 ##Thanks
 
 ### - to great Groovy Community, and especially to Andrey Bloschetsov.
