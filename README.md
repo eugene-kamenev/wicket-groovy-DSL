@@ -10,18 +10,19 @@ Versions used:
 #### 4. GORM Standalone module from Grails for examples
 
 #### Operators overloaded:
-#####' +  ' => parentComponent.add(child)
-#####' -  ' => parentComponent.remove(child)
-#####' >> ' => component.replaceWith(another)
-#####' << ' => component.addOrReplace(another)
+#####'parent + child ' => parent.add(child)
+#####'parent - child' => parent.remove(child)
+#####'component >> another' => component.replaceWith(another)
+#####'component << another' => component.addOrReplace(another)
 
 ## Pimp my library pattern
 This project follows Pipm my library pattern described by Martin Odersky in 2006 year. The Pimp my Library Pattern suggests an approach for extending a library that nearly does everything that you need but just needs a little more. It assumes that you do not have source code for the library of interest.
 Read more here: http://groovy.codehaus.org/Pimp+my+Library+Pattern
 
 ## Examples
-Later I will provide more complex examples. But to understand the concept, I think it is enough.
-At this moment Label, AjaxLink, MarkupContainer, Form, StatelessForm, ListView, Link, BookmarkableLink, PasswordField, EmailTextField, UrlTextField, TextField for Numbers, TextField, DropDownChoice with ChoiceRenderer, Fragment, CheckBoxMultipleChoice are implemented
+At this moment Label, AjaxLink, MarkupContainer, Form, StatelessForm, ListView, Link, BookmarkableLink, PasswordField, EmailTextField, UrlTextField, TextField for Numbers, TextField, DropDownChoice with ChoiceRenderer, Fragment, CheckBoxMultipleChoice, DataView, DataProvider (for GORM criteria/query), CheckBox,  are extended
+You can see many components in action by building examples with Gradle, it is easy.
+Also there are very interesting examples of GORM usage with Apache Wicket Components.
 
 ##Usage
 ```groovy
@@ -82,7 +83,7 @@ visible, enabled and others (take a look at traits wicket/core/traits package).
 In example folder there is GORM (orm from Grails) integrated with Apache Wicket and this DSL, take a look! It is very interesting!
 No special components are required :)
 ```groovy
-use(WicketDSL) {
+use(WicketGormDSL) {
             def listView = Person.findAll().listView('personList')
             { ListItem<Person> item ->
                 item.label 'personName', item.model
@@ -93,7 +94,7 @@ use(WicketDSL) {
         }
 ```
 ```groovy
-use(WicketDSL, WicketFormDSL) {
+use(WicketGormDSL) {
             def form = form 'person', [model:new CompoundPropertyModel(new Person())
                                        submit: { Person.withTransaction {
                                         it.modelObject.save(flush:true) }
