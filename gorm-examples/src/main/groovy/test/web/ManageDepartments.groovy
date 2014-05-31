@@ -1,6 +1,7 @@
 package test.web
 
 import grails.gorm.DetachedCriteria
+import org.apache.wicket.RestartResponseException
 import org.apache.wicket.ajax.AjaxRequestTarget
 import org.apache.wicket.ajax.markup.html.AjaxLink
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator
@@ -39,8 +40,9 @@ class ManageDepartments extends CreateEditViewPage {
                     }])
                     item.ajaxLink 'delete', [model: item.model, click: { AjaxRequestTarget a, AjaxLink<Department> link ->
                         Department.withTransaction {
-                            link.modelObject.persons*.department = null
-                            link.modelObject.delete(flush: true)
+                            Department d = link.modelObject.merge()
+                            Person.where { department == d }.list().each { it.department = null; it.merge() }
+                            d.delete(flush: true)
                         }
                         fragment.modelChanged()
                         a.add(fragment)
@@ -84,6 +86,7 @@ class ManageDepartments extends CreateEditViewPage {
                 d.save(insert: true)
             }
         }
+        throw new RestartResponseException(ManageDepartments)
     }
 
 }

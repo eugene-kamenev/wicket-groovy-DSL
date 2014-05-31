@@ -1,5 +1,7 @@
 package test.web
+
 import grails.gorm.DetachedCriteria
+import org.apache.wicket.RestartResponseException
 import org.apache.wicket.ajax.AjaxRequestTarget
 import org.apache.wicket.ajax.markup.html.AjaxLink
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator
@@ -45,7 +47,7 @@ class ManagePersons extends CreateEditViewPage {
                                                        params  : [fetch: ['department': 'eager']],
                                                        fields  : ['email', 'name']]) { Item<Person> item ->
                     item.label 'id'
-                    item.bookmarkLink('departmentLink', ManageDepartments, [params: ['id': item.modelObject.id]]).label 'department.title'
+                    item.bookmarkLink('departmentLink', ManageDepartments, [params: ['id': item?.modelObject?.department?.id]]).label 'department.title'
                     item.ajaxLink 'delete', [model: item.model, click: { AjaxRequestTarget a, AjaxLink<Person> link ->
                         Person.withTransaction {
                             link.modelObject.delete(flush: true)
@@ -70,7 +72,10 @@ class ManagePersons extends CreateEditViewPage {
                     : Model.of(new Person())
             fragment = fragment('content', 'edit') {
                 it.entityForm 'person', [model : model,
-                                         submit: { form -> println form.modelObject },
+                                         submit: { form ->
+                                             Person.withTransaction { form.modelObject.save(flush: true) }
+                                             throw new RestartResponseException(ManagePersons)
+                                         },
                                          fields: ['name', 'email', 'password', 'department']]
                 it + new FeedbackPanel('errors')
             }
@@ -80,7 +85,7 @@ class ManagePersons extends CreateEditViewPage {
     void viewByDepartment(Long departmentId) {
         use(WicketGormDSL) {
             fragment = fragment 'content', 'viewByDepartment', {
-                def model = loadModel { Department.findById(departmentId, [fetch: [persons: 'eager']])}
+                def model = loadModel { Department.findById(departmentId, [fetch: [persons: 'eager']]) }
                 it.label 'department', [model: new PropertyModel(model, 'title')]
                 it.beanDataView 'persons', [max     : { 5 },
                                             criteria: {

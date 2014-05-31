@@ -32,7 +32,7 @@ class GormApplication extends WebApplication {
 
     @Override
     RuntimeConfigurationType getConfigurationType() {
-        return RuntimeConfigurationType.DEVELOPMENT
+        return RuntimeConfigurationType.DEPLOYMENT
     }
 
     @Override

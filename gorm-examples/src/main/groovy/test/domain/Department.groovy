@@ -15,7 +15,7 @@ class Department extends GormEntity {
     static hasMany = [persons: Person]
 
     static mapping = {
-        persons cascade: 'all'
+        persons cascade: 'save-update'
     }
 
     static constraints = {
