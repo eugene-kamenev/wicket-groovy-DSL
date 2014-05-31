@@ -42,6 +42,13 @@ class WicketDSL extends OperatorsOverload {
         } else if (params?.image) {
             image = new GroovyImage<T>(id, params?.image as IResource, override(params))
         } else if (params?.params) {
+            if (params?.params instanceof Map) {
+                def parameters = new PageParameters();
+                (params?.params as Map<String, Object>)?.each { k, v ->
+                    parameters.add(k, v)
+                }
+                params?.params = parameters
+            }
             image = new GroovyImage<T>(id, params?.resource as ResourceReference, params?.params as PageParameters, override(params))
         } else if (params?.model) {
             image = new GroovyImage<T>(id, params?.model as IModel, override(params))
@@ -114,6 +121,13 @@ class WicketDSL extends OperatorsOverload {
     }
 
     static BookmarkablePageLink bookmarkLink(MarkupContainer parent, String id, Class<? extends Page> target, Map<String, Object> params = null, Closure closure = null) {
+        if (params?.params instanceof Map) {
+            def parameters = new PageParameters();
+            (params?.params as Map<String, Object>)?.each { k, v ->
+                parameters.add(k, v)
+            }
+            params?.params = parameters
+        }
         def link = new GroovyBookmarkablePageLink(id, target, params?.params as PageParameters, override(params))
         parent?.add link
         closure?.call(link)

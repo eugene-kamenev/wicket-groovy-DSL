@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<wicket:extend>
+    <div wicket:id="content">
+
+    </div>
+    <wicket:fragment wicket:id="edit">
+        <h2>Department
+            <small>editing</small>
+        </h2>
+        <div wicket:id="errors"></div>
+        <form wicket:id="department" class="input-group">
+            <input type="text" wicket:id="title" placeholder="Title"
+                   class="form-control"/>
+            <br/><br/>
+            <label wicket:for="enabled">Enabled</label>
+            <input wicket:id="enabled" type="checkbox"
+                   class="form-control"/>
+            <br/><br/>
+
+            <h2>Select
+                <small>Department Persons</small>
+            </h2>
+            <div wicket:id="persons">
+            </div>
+            <br/><br/>
+            <input type="submit" value="Submit " class="btn btn-success"/>
+        </form>
+    </wicket:fragment>
+    <wicket:fragment wicket:id="view">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Enabled</th>
+                <th>Persons</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr wicket:id="departments">
+                <td wicket:id="id">#</td>
+                <td wicket:id="title">Name</td>
+                <td wicket:id="enabled"></td>
+                <td><a wicket:id="personLink">
+                    Count (<span wicket:id="personCount"></span>)
+                </a></td>
+                <td><a wicket:id="edit">Edit</a></td>
+                <td><a wicket:id="delete">Delete</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <div wicket:id="navigation"></div>
+        <a wicket:id="createNew" class="btn btn-success">Create New Department</a>
+    </wicket:fragment>
+</wicket:extend>
+</body>
+</html>

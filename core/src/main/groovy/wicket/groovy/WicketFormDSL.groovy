@@ -5,14 +5,13 @@ import org.apache.wicket.MarkupContainer
 import org.apache.wicket.markup.html.form.*
 import org.apache.wicket.model.IModel
 import org.apache.wicket.validation.validator.UrlValidator
-import wicket.groovy.core.OperatorsOverload
 import wicket.groovy.core.components.form.*
 
 /**
  * @author Eugene Kamenev @eugenekamenev
  */
 @CompileStatic
-class WicketFormDSL extends OperatorsOverload {
+class WicketFormDSL extends WicketDSL {
 
     static <T> TextField<T> text(MarkupContainer parent, String id, Map<String, Object> params = null, Closure closure = null) {
         def child = new GroovyTextField<T>(id, params?.model as IModel<T>, params?.type as Class<T>, override(params))
@@ -71,6 +70,37 @@ class WicketFormDSL extends OperatorsOverload {
         parent?.add dropDown
         closure?.call dropDown
         dropDown
+    }
+
+    static <T> RadioChoice<T> radioChoice(MarkupContainer parent, String id, Map<String, Object> params = null, Closure closure = null) {
+        def radioChoice
+        def renderer = null
+        if (params?.renderer) {
+            renderer = params?.renderer as IChoiceRenderer
+        }
+        if (params?.render) {
+            renderer = choiceRender(null, params?.render as Map<String, String>)
+        }
+        if (!renderer) {
+            renderer = new ChoiceRenderer<T>()
+        }
+        if (params?.choices instanceof List) {
+            radioChoice = new GroovyRadioChoice(id, params?.model as IModel, params?.choices as List<T>, renderer as IChoiceRenderer, override(params))
+        } else if (params?.choices instanceof IModel) {
+            radioChoice = new GroovyRadioChoice(id, params?.model as IModel, params?.choices as IModel<List<T>>, renderer as IChoiceRenderer, override(params))
+        } else {
+            radioChoice = new GroovyRadioChoice(id)
+        }
+        parent?.add radioChoice
+        closure?.call radioChoice
+        radioChoice
+    }
+
+    static CheckBox checkBox(MarkupContainer parent, String id, Map<String, Object> params = null, Closure closure = null) {
+        def checkBox = new GroovyCheckBoxChoice(id, params?.model as IModel, override(params))
+        parent?.add checkBox
+        closure?.call checkBox
+        checkBox
     }
 
     static <T> CheckBoxMultipleChoice<T> checkChoices(MarkupContainer parent, String id, Map<String, Object> params = null, Closure closure = null) {

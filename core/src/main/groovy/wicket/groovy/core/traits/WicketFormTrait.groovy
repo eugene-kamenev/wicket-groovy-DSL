@@ -11,6 +11,7 @@ trait WicketFormTrait extends WicketComponentTrait {
     }
 
     void onValidate() {
+        this.updateFormComponentModels();
         override?.validate ? use(WicketDSL) { override.validate(this) } : super.onValidate()
     }
 
