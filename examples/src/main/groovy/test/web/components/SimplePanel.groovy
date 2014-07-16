@@ -1,20 +1,21 @@
 package test.web.components
 
 import org.apache.wicket.ajax.AjaxRequestTarget
-import org.apache.wicket.ajax.markup.html.AjaxLink
 import org.apache.wicket.markup.html.panel.Panel
-import org.apache.wicket.model.Model
-import wicket.groovy.WicketDSL
 
 class SimplePanel extends Panel {
     SimplePanel(String id) {
         super(id)
-        use(WicketDSL) {
-            ajaxLink('ajaxLink', [click: { AjaxRequestTarget target, AjaxLink link ->
-                target.appendJavaScript('alert(\'how are you?\')')
-            }]) { AjaxLink m ->
-                m.label('label', [model: Model.of('Click Me!')])
+        ajaxLink('ajaxLink') {
+            label('label').model {
+                new Random().nextInt() % 2 == 0 ?
+                        'even'.toLoadModel() :
+                        'odd'.toLoadModel()
+            }
+            click { AjaxRequestTarget target ->
+                target.appendJavaScript('alert(\'please toggle the panel\')')
             }
         }
+
     }
 }

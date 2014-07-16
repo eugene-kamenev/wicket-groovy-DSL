@@ -1,18 +1,12 @@
 package wicket.groovy.core.components.ajax
-
 import groovy.transform.CompileStatic
+import groovy.transform.InheritConstructors
 import org.apache.wicket.ajax.markup.html.AjaxLink
-import org.apache.wicket.model.IModel
 import wicket.groovy.core.traits.WicketLinkTrait
-
 /**
  * Extended by @eugenekamenev
  */
 @CompileStatic
-class GroovyAjaxLink<T> extends AjaxLink<T> implements WicketLinkTrait {
-
-    GroovyAjaxLink(String id, IModel<T> model = null, Map<String, Closure> override = null) {
-        super(id, model)
-        this.override = override
-    }
+@InheritConstructors
+class GroovyAjaxLink<T> extends AjaxLink<T> implements WicketLinkTrait<T> {
 }

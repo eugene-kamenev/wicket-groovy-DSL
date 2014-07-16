@@ -8,8 +8,8 @@ allprojects {
         mavenLocal()
     }
 
-    def groovy = '2.3.2'
-    def wicket = '6.15.0'
+    def groovy = '2.3.4'
+    def wicket = '6.16.0'
 
     dependencies {
         compile "org.codehaus.groovy:groovy-all:${groovy}"

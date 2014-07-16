@@ -1,9 +1,6 @@
 package test.web
 
 import org.apache.wicket.markup.html.panel.FeedbackPanel
-import org.apache.wicket.model.CompoundPropertyModel
-import wicket.groovy.WicketDSL
-import wicket.groovy.WicketFormDSL
 
 class LoginPage extends TemplatePage {
     String juname
@@ -12,13 +9,13 @@ class LoginPage extends TemplatePage {
     @Override
     protected void onInitialize() {
         super.onInitialize()
-        use(WicketDSL, WicketFormDSL) {
-            def form = statelessForm('login', [model: new CompoundPropertyModel(this), submit: {
-                this.juname == this.jup ? info('Login Successful') : error('Login failed')
-            }])
-            form.text('juname')
-            form.password('jup')
-            form + new FeedbackPanel('feedback')
+        statelessForm('login') {
+            it + new FeedbackPanel('feedback')
+            text('juname').model(this.property('juname'))
+            password('jup').model(this.property('jup'))
+            submit {
+                this.juname == this.jup ? info('Login Successful') : error('Login failed');
+            }
         }
     }
 }

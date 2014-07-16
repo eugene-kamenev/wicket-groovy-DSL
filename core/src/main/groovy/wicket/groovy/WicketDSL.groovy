@@ -1,180 +1,405 @@
 package wicket.groovy
 
 import groovy.transform.CompileStatic
+import groovy.transform.TypeCheckingMode
+import groovy.transform.stc.ClosureParams
+import groovy.transform.stc.FromString
 import org.apache.wicket.Component
 import org.apache.wicket.MarkupContainer
 import org.apache.wicket.Page
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior
+import org.apache.wicket.ajax.AjaxEventBehavior
+import org.apache.wicket.ajax.AjaxRequestTarget
+import org.apache.wicket.ajax.attributes.AjaxCallListener
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes
 import org.apache.wicket.ajax.markup.html.AjaxLink
-import org.apache.wicket.markup.html.WebMarkupContainer
-import org.apache.wicket.markup.html.basic.Label
-import org.apache.wicket.markup.html.form.Form
-import org.apache.wicket.markup.html.form.StatelessForm
-import org.apache.wicket.markup.html.image.Image
-import org.apache.wicket.markup.html.link.BookmarkablePageLink
-import org.apache.wicket.markup.html.link.Link
-import org.apache.wicket.markup.html.list.ListView
-import org.apache.wicket.markup.html.panel.Fragment
-import org.apache.wicket.model.IModel
-import org.apache.wicket.model.LoadableDetachableModel
-import org.apache.wicket.request.mapper.parameter.PageParameters
-import org.apache.wicket.request.resource.IResource
-import org.apache.wicket.request.resource.ResourceReference
-import wicket.groovy.core.OperatorsOverload
+import org.apache.wicket.behavior.AttributeAppender
+import org.apache.wicket.behavior.Behavior
+import org.apache.wicket.markup.html.form.AbstractChoice
+import org.apache.wicket.markup.html.form.IChoiceRenderer
+import org.apache.wicket.markup.html.list.ListItem
+import org.apache.wicket.model.*
+import org.codehaus.groovy.runtime.InvokerHelper
+import wicket.groovy.core.components.ajax.GroovyAjaxButton
 import wicket.groovy.core.components.ajax.GroovyAjaxLink
 import wicket.groovy.core.components.basic.*
-import wicket.groovy.core.components.form.GroovyForm
-import wicket.groovy.core.components.form.GroovyStatelessForm
+import wicket.groovy.core.components.form.*
 
 @CompileStatic
-class WicketDSL extends OperatorsOverload {
+class WicketDSL<M extends Serializable> {
 
-    static <T> WebMarkupContainer div(MarkupContainer parent, String id, Map<String, Object> params = null, Closure closure = null) {
-        def child = new GroovyWebMarkupContainer(id, params?.model as IModel, override(params))
-        parent?.add child
-        closure?.call(child)
-        child
+    static <C extends MarkupContainer, T extends GroovyWebMarkupContainer<M>> T div(C parent, String id,
+                                                                                    @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST) @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+        build(parent, new GroovyWebMarkupContainer(id), closure)
     }
 
-    static <T> Image image(MarkupContainer parent, String id, Map<String, Object> params = null, Closure closure = null) {
-        def image
-        if (params?.resource) {
-            image = new GroovyImage<T>(id, params?.resource as ResourceReference, override(params))
-        } else if (params?.image) {
-            image = new GroovyImage<T>(id, params?.image as IResource, override(params))
-        } else if (params?.params) {
-            if (params?.params instanceof Map) {
-                def parameters = new PageParameters();
-                (params?.params as Map<String, Object>)?.each { k, v ->
-                    parameters.add(k, v)
-                }
-                params?.params = parameters
-            }
-            image = new GroovyImage<T>(id, params?.resource as ResourceReference, params?.params as PageParameters, override(params))
-        } else if (params?.model) {
-            image = new GroovyImage<T>(id, params?.model as IModel, override(params))
+    static <C extends MarkupContainer, T extends GroovyImage<M>> T image(C parent, String id,
+                                                                         @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                         @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+
+        build(parent, new GroovyImage(id), closure)
+    }
+
+    static <C extends MarkupContainer, T extends GroovyFragment<M>> T fragment(C parent, String id, String markupId, boolean addToParent = true,
+                                                                               @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                               @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+        if (addToParent) {
+            build(parent, new GroovyFragment(id, markupId, parent), closure)
         } else {
-            image = new GroovyImage<T>(id, override(params))
+            build(null, new GroovyFragment(id, markupId, parent), closure)
         }
-        closure?.call(image)
-        image
     }
 
-    static <T> Fragment fragment(MarkupContainer parent, String id, String markupId, Map<String, Object> params = null, Closure closure = null) {
-        def child = new GroovyFragment(id, markupId, params?.provider as MarkupContainer ?: parent, params?.model as IModel<T>, override(params))
-        parent?.add child
-        closure?.call(child)
-        child
+    static <I extends ListItem<M>, C extends MarkupContainer, T extends GroovyListView<M>> T listView(C parent, String id,
+                                                                                                      @DelegatesTo(value = I, strategy = Closure.DELEGATE_FIRST)
+                                                                                                      @ClosureParams(value = FromString, options = 'I')
+                                                                                                              Closure closure = null) {
+        build(parent, new GroovyListView<M>(id, null as List, closure)) as T
     }
 
-    static <T> Fragment fragment(MarkupContainer parent, String id, String markupId, Closure closure) {
-        fragment(parent, id, markupId, null, closure)
+    static <I extends ListItem<M>, C extends MarkupContainer, T extends GroovyListView<M>> T listView(C parent, String id, IModel<? extends List> model,
+                                                                                                      @DelegatesTo(value = I, strategy = Closure.DELEGATE_FIRST)
+                                                                                                      @ClosureParams(value = FromString, options = 'I')
+                                                                                                              Closure closure = null) {
+        build(parent, new GroovyListView<M>(id, model, closure)) as T
     }
 
-    static <T> ListView<T> listView(MarkupContainer parent, String id, Map<String, Object> params = null, Closure closure = null) {
-        def child = new GroovyListView(id, params?.model as IModel<List<T>>, override(params), closure)
-        parent?.add child
-        child
+    static <I extends ListItem, C extends MarkupContainer, T extends GroovyListView<M>> T listView(C parent, String id, List list,
+                                                                                                   @DelegatesTo(value = I, strategy = Closure.DELEGATE_FIRST)
+                                                                                                   @ClosureParams(value = FromString, options = 'I')
+                                                                                                           Closure closure = null) {
+        build(parent, new GroovyListView<M>(id, list, closure)) as T
     }
 
-    static <T> ListView<T> listView(List<T> list, String id, Map<String, Object> params = null, Closure closure = null) {
-        def child = new GroovyListView<T>(id, list, override(params), closure)
-        child
+
+    static <I extends ListItem<M>, T extends GroovyListView<M>> T listView(List list, String id,
+                                                                           @DelegatesTo(value = I, strategy = Closure.DELEGATE_FIRST)
+                                                                           @ClosureParams(value = FromString, options = 'I')
+                                                                                   Closure onItem = null) {
+        new GroovyListView<M>(id, list, onItem)
     }
 
-    static <T> ListView<T> listView(List<T> list, String id, Closure closure) {
-        def child = new GroovyListView<T>(id, list, null, closure)
-        child
-    }
-
-    static <T> LoadableDetachableModel<T> loadModel(parent, Closure closure) {
-        def model = new LoadableDetachableModel() {
+    static <T> LoadableDetachableModel<T> loadModel(parent, Closure<T> closure) {
+        new LoadableDetachableModel() {
             @Override
             protected Object load() {
                 closure.call()
             }
         }
-        model
     }
 
-    static <T> StatelessForm<T> statelessForm(MarkupContainer parent, String id, Map<String, Object> params = null, Closure closure = null) {
-        def form
-        if (params?.model) {
-            form = new GroovyStatelessForm<T>(id, params?.model as IModel<T>, override(params))
-        } else {
-            form = new GroovyStatelessForm<T>(id, override(params))
-        }
-        parent?.add form
-        closure?.call(form)
-        form
+    static <C extends MarkupContainer, T extends GroovyStatelessForm<M>> T statelessForm(C parent, String id,
+                                                                                         @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                         @ClosureParams(value = FromString, options = 'T')
+                                                                                                 Closure closure = null) {
+        build(parent, new GroovyStatelessForm<M>(id), closure)
     }
 
-    static <T> Form<T> form(MarkupContainer parent, String id, Map<String, Object> params = null, Closure closure = null) {
-        def form
-        if (params?.model) {
-            form = new GroovyForm<T>(id, params?.model as IModel<T>, override(params))
-        } else {
-            form = new GroovyForm<T>(id, override(params))
-        }
-        parent?.add form
-        closure?.call(form)
-        form
+    static <C extends MarkupContainer, T extends GroovyForm<M>> T form(C parent, String id,
+                                                                       @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                       @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+        build(parent, new GroovyForm<M>(id), closure)
     }
 
-    static BookmarkablePageLink bookmarkLink(MarkupContainer parent, String id, Class<? extends Page> target, Map<String, Object> params = null, Closure closure = null) {
-        if (params?.params instanceof Map) {
-            def parameters = new PageParameters();
-            (params?.params as Map<String, Object>)?.each { k, v ->
-                parameters.add(k, v)
+    static <C extends MarkupContainer, T extends GroovyForm<M>> T ajaxForm(C parent, String id,
+                                                                           @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                           @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+        def form = form(parent, id, closure)
+        Closure submit = form.override.remove('submit')
+        Closure error = form.override.remove('error')
+        def submitButton = new GroovyAjaxButton<M>('submit')
+        submitButton.override.submit = submit
+        submitButton.override.error = error
+        form.add submitButton
+        form as T
+    }
+
+    @CompileStatic(TypeCheckingMode.SKIP)
+    static <C extends MarkupContainer, T extends GroovyBookmarkablePageLink> T bookmarkLink(C parent, String id, Class<? extends Page> target,
+                                                                                            @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                            @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+        build(parent, new GroovyBookmarkablePageLink(id, target, null), closure)
+    }
+
+    static <C extends MarkupContainer, M, T extends GroovyLabel<M>> T label(C parent, String id,
+                                                                            @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                            @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+        build(parent, new GroovyLabel(id), closure)
+    }
+
+    static <C extends MarkupContainer, T extends GroovyAjaxLink<M>> T ajaxLink(C parent, String id,
+                                                                               @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                               @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+        build(parent, new GroovyAjaxLink<M>(id), closure)
+    }
+
+    static <C extends MarkupContainer> IModel<M> model(C container) {
+        container.getDefaultModel()
+    }
+
+    static <C extends MarkupContainer, T extends AjaxLink<M>> T ajaxConfirmLink(C parent, String id, Map<String, Object> params = null,
+                                                                                @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+        def child = new GroovyAjaxLink<M>(id) {
+            @Override
+            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                super.updateAjaxAttributes(attributes);
+                AjaxCallListener ajaxCallListener = new AjaxCallListener();
+                ajaxCallListener.onPrecondition("return confirm('" + params?.text + "');");
+                attributes.getAjaxCallListeners().add(ajaxCallListener);
             }
-            params?.params = parameters
         }
-        def link = new GroovyBookmarkablePageLink(id, target, params?.params as PageParameters, override(params))
-        parent?.add link
-        closure?.call(link)
-        link
+        closure?.call(child)
+        child as T
     }
 
-    static <T> Label label(MarkupContainer parent, String id, Map<String, Object> params = null, Closure closure = null) {
-        def child
-        if (params?.model) {
-            child = new GroovyLabel(id, params?.model as IModel<T>, override(params))
-        } else if ((params?.value instanceof String || params?.value instanceof Serializable) && !params?.value instanceof IModel) {
-            child = new GroovyLabel(id, params?.value as String, override(params));
-        } else {
-            child = new GroovyLabel(id)
+    static <C extends MarkupContainer, T extends GroovyLink<M>> T link(C parent, String id,
+                                                                       @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                       @ClosureParams(value = FromString, options = 'T')
+                                                                               Closure closure = null) {
+        build(parent, new GroovyLink<T>(id), closure)
+    }
+
+    static <T extends Component> T withModel(T container, IModel<M> model) {
+        container.setDefaultModel(model)
+    }
+
+    static <C extends MarkupContainer, T extends Component> T and(C parent, T child) {
+        parent.add(child)
+    }
+
+    static <T extends Component> Component withModel(T container, Closure<IModel<M>> modelClosure) {
+        container.setDefaultModel(modelClosure.call())
+    }
+
+    static <C extends MarkupContainer, T extends GroovyTextField<M>> T text(C parent, String id,
+                                                                            @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST) @ClosureParams(value = FromString, options = 'T')
+                                                                                    Closure closure = null) {
+        build(parent, new GroovyTextField(id), closure)
+    }
+
+    static <C extends MarkupContainer, T extends GroovyPasswordTextField> T password(C parent, String id,
+                                                                                     @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                     @ClosureParams(value = FromString, options = 'T')
+                                                                                             Closure closure = null) {
+        build(parent, new GroovyPasswordTextField(id), closure)
+    }
+
+    static <C extends MarkupContainer, T extends GroovyEmailField> T email(C parent, String id,
+                                                                           @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                           @ClosureParams(value = FromString, options = 'T')
+                                                                                   Closure closure = null) {
+        build(parent, new GroovyEmailField(id), closure);
+    }
+
+    static <C extends MarkupContainer, T extends GroovyUrlField> T url(C parent, String id, String url,
+                                                                       @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                       @ClosureParams(value = FromString, options = 'T')
+                                                                               Closure closure = null) {
+        build(parent, new GroovyUrlField(id, url)) as T
+    }
+
+    static <C extends MarkupContainer, T extends GroovyTextField<BigDecimal>> T number(C parent, String id,
+                                                                                       @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                       @ClosureParams(value = FromString, options = 'T')
+                                                                                               Closure closure = null) {
+        build(parent, new GroovyTextField(id, BigDecimal), closure)
+    }
+
+    static <C extends MarkupContainer, T extends GroovyDropDownChoice<M>> T dropDown(C parent, String id,
+                                                                                     @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                     @ClosureParams(value = FromString, options = 'T')
+                                                                                             Closure closure = null) {
+        build(parent, new GroovyDropDownChoice<M>(id), closure)
+    }
+
+    static <C extends MarkupContainer, T extends GroovyRadioChoice<M>> T radioChoice(C parent, String id,
+                                                                                     @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                     @ClosureParams(value = FromString, options = 'T')
+                                                                                             Closure closure = null) {
+        build(parent, new GroovyRadioChoice(id), closure)
+    }
+
+    static <C extends MarkupContainer, T extends GroovyCheckBoxChoice> T checkBox(C parent, String id,
+                                                                                  @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                  @ClosureParams(value = FromString, options = 'T')
+                                                                                          Closure closure = null) {
+        build(parent, new GroovyCheckBoxChoice(id), closure)
+    }
+
+    static <C extends MarkupContainer, T extends GroovyCheckBoxMultipleChoice<M>> T checkChoices(C parent, String id,
+                                                                                                 @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                                 @ClosureParams(value = FromString, options = 'T')
+                                                                                                         Closure closure = null) {
+        build(parent, new GroovyCheckBoxMultipleChoice<M>(id), closure)
+    }
+
+    @CompileStatic(TypeCheckingMode.SKIP)
+    static <A, M, T extends AbstractChoice<M, A>> T choicesRender(
+            final T choice, final Map objectProperty) {
+        choice?.setChoiceRenderer(new IChoiceRenderer() {
+            @Override
+            Object getDisplayValue(Object object) {
+                return object[objectProperty?.value]
+            }
+
+            @Override
+            String getIdValue(Object object, int index) {
+                return object[objectProperty?.id]
+            }
+        })
+        choice
+    }
+
+    static <T extends GroovyDropDownChoice<M>> T toDropDown(IModel<? extends List<M>> choices, String id,
+                                                            @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                            @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+        build(null, new GroovyDropDownChoice<M>(id, null as IModel, choices), closure)
+    }
+
+    static <T extends GroovyDropDownChoice<M>> T toDropDown(List<M> choices, String id,
+                                                            @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                            @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+        build(null, new GroovyDropDownChoice<M>(id, null as IModel, choices), closure)
+    }
+
+    static <T extends GroovyLabel<M>> T toLabel(M o, String id,
+                                                @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                @ClosureParams(value = FromString, options = 'T')
+                                                        Closure closure = null) {
+        toLabel(loadModel(o), id, closure) as T
+    }
+
+    static <T extends GroovyLabel<M>> T toLabel(IModel<M> model, String id,
+                                                @DelegatesTo(value = T,
+                                                        strategy = Closure.DELEGATE_FIRST)
+                                                @ClosureParams(value = FromString, options = 'T')
+                                                        Closure closure = null) {
+        def label = label(null, id, closure)
+        label.setDefaultModel(model)
+        label as T
+    }
+
+    static <C extends Component, A extends AjaxRequestTarget> C ajaxBehavior(C component,
+                                                                             @ClosureParams(value = FromString, options = 'A') Closure action) {
+        component.add new AbstractDefaultAjaxBehavior() {
+            @Override
+            protected void respond(AjaxRequestTarget target) {
+                action.call(target)
+            }
         }
-        parent?.add child
+    }
+
+    static <C extends Component, A extends AjaxRequestTarget> C ajaxOnClick(C component,
+                                                                            @ClosureParams(value = FromString, options = 'A') Closure action) {
+        component.add new AjaxEventBehavior('onclick') {
+            @Override
+            protected void onEvent(AjaxRequestTarget target) {
+                action.call(target)
+            }
+        }
+    }
+
+    static <T> IModel<T> loadModel(final T o) {
+        new LoadableDetachableModel() {
+            @Override
+            protected Object load() {
+                return o
+            }
+        }
+    }
+
+    static <T> IModel<T> entityModel(T object) {
+        return new EntityModel<T>(object)
+    }
+
+    @CompileStatic(TypeCheckingMode.SKIP)
+    static class EntityModel<T> extends LoadableDetachableModel<T> {
+        Class<T> clazz
+        Object id
+
+        EntityModel(T object) {
+            this.clazz = object.class
+            this.id = object.id
+        }
+
+        @Override
+        protected T load() {
+            return InvokerHelper.invokeMethod(clazz, 'get', id) as T
+        }
+    }
+
+    static <T extends Component> T css(T component, String... names) {
+        css(component, names.toList())
+    }
+
+    static <T extends Component> T css(T component, List<String> list) {
+        component.add(new AttributeAppender('class', Model.of(list.join(' ')))) as T
+    }
+
+    static <T extends Component> T css(T component, Closure<List<String>> closure) {
+        css(component, closure.call())
+    }
+
+    static <T extends Component> T compoundModel(T component, IModel model) {
+        component.setDefaultModel(new CompoundPropertyModel(model))
+    }
+
+    static <T extends Component> T compoundModel(T component, Component modelComponent) {
+        component.setDefaultModel(new CompoundPropertyModel(modelComponent))
+    }
+
+    static <T> IModel<T> property(IModel model, String property) {
+        new PropertyModel(model, property)
+    }
+
+    static <T> IModel<T> property(Object object, String property) {
+        new PropertyModel(object, property)
+    }
+
+    static <C extends Component, T> IModel<T> property(C object, String property, boolean fromModel = false) {
+        fromModel ?
+                new PropertyModel(object.getDefaultModel(), property) : new PropertyModel(object, property)
+    }
+
+    static void replaceOnPage(AjaxRequestTarget t, String id, Component Component) {
+        t.add(t.page.get(id)?.replaceWith(Component))
+    }
+
+    static <T> IModel<T> toLoadModel(final T object) {
+        loadModel(null) {
+            object
+        }
+    }
+
+    private static <C extends MarkupContainer, T extends Component> T build(C parent, T child,
+                                                                            @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                            @ClosureParams(value = FromString, options = 'T')
+                                                                                    Closure closure = null) {
+        parent?.add(child)
+        closure?.resolveStrategy = Closure.DELEGATE_FIRST
+        closure?.delegate = child
         closure?.call(child)
         child
     }
 
-    static <T> AjaxLink ajaxLink(MarkupContainer parent, String id, Map<String, Object> params = null, Closure closure = null) {
-        def child = new GroovyAjaxLink(id, params?.model as IModel<T>, override(params))
-        parent?.add child
-        closure?.call(child)
-        child
-    }
-
-    static <T> Link<T> link(MarkupContainer parent, String id, Map<String, Object> params = null, Closure closure = null) {
-        def child = new GroovyLink(id, params?.model as IModel<T>, override(params))
-        parent?.add child
-        closure?.call(child)
-        child
-    }
-
-    static Component rightShift(MarkupContainer container, Component another) {
+    static <T extends Component> T rightShift(T container, T another) {
         container?.replaceWith another
     }
 
-    static Component plus(MarkupContainer parent, Component child) {
+    static <T extends MarkupContainer, C extends Component> T plus(T parent, C child) {
         parent?.add child
     }
 
-    static Component minus(MarkupContainer parent, Component child) {
+    static <T extends MarkupContainer> T plus(T parent, Behavior behavior) {
+        parent?.add(behavior) as T
+    }
+
+    static <T extends MarkupContainer, C extends Component> T minus(T parent, C child) {
         parent?.remove child
     }
 
-    static Component leftShift(MarkupContainer parent, Component child) {
+    static <T extends MarkupContainer, C extends Component> T leftShift(T parent, C child) {
         parent?.addOrReplace child
     }
 

@@ -1,23 +1,12 @@
 package wicket.groovy.core.components.form
-
 import groovy.transform.CompileStatic
+import groovy.transform.InheritConstructors
 import org.apache.wicket.markup.html.form.Form
-import org.apache.wicket.model.IModel
 import wicket.groovy.core.traits.WicketFormTrait
-
 /**
  * Extended by @eugenekamenev
  */
 @CompileStatic
-class GroovyForm<T> extends Form<T> implements WicketFormTrait {
-
-    GroovyForm(String id, Map<String, Closure> override = null) {
-        super(id)
-        this.override = override
-    }
-
-    GroovyForm(String id, IModel<T> model, Map<String, Closure> override = null) {
-        super(id, model)
-        this.override = override
-    }
+@InheritConstructors
+class GroovyForm<T> extends Form<T> implements WicketFormTrait<T> {
 }

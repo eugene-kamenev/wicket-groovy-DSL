@@ -1,17 +1,30 @@
 package wicket.groovy.core.traits
 
 import org.apache.wicket.ajax.AjaxRequestTarget
-import wicket.groovy.WicketDSL
 
 /**
- * @author  Eugene Kamenev @eugenekamenev
+ * @author Eugene Kamenev @eugenekamenev
  */
-trait WicketLinkTrait extends WicketComponentTrait {
+trait WicketLinkTrait<T> extends WicketComponentTrait<T> {
+
     void onClick(AjaxRequestTarget target) {
-        override?.click ? use(WicketDSL) { callClosure(override.click, target, this) } : null
+        if (this.override?.click) {
+            if (this.override.click.maximumNumberOfParameters > 1) {
+                this.override.click.call(target, this)
+            } else {
+                this.override.click.call(target)
+            }
+        } else {
+            super.onClick(target)
+        }
     }
 
     void onClick() {
-        override?.click ? use(WicketDSL) { override.click(this) } : null
+        if (this.override?.click) {
+            //this.override.click.delegate = this;
+            this.override.click.call(this)
+        } else {
+            super.onClick()
+        }
     }
 }
