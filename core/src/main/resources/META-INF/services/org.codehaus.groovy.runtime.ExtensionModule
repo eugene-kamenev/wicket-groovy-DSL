@@ -1,0 +1,3 @@
+moduleName=wicket-module
+moduleVersion=1.0
+extensionClasses=wicket.groovy.WicketDSL
