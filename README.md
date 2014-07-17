@@ -6,7 +6,7 @@ But with some little, yet powerful Groovy DSL written, we can extend Wicket to s
 Versions used:
 #### 1. Apache Wicket 6.16.0
 #### 2. Groovy 2.3.4 (Yes, with Traits :)
-#### 3. Twitter bootstap for some beautify for examples
+#### 3. Twitter bootstap for some beautify
 
 ## Changes from previous version
 Previous version was not well, DSL syntax was not so good, and the main problem was that we cannot use @CompileStatic groovy compiler annotation.
@@ -21,12 +21,28 @@ So every first method parameter in WicketDSL class will be forced to component t
 void onInitialize() {
 form('wicketForm') {
     compoundModel(this)
-    text 'input1'
-    text 'input2'
+    text('input1').css('cssClass')
+    text('input2').css {
+        // yes it can be conditional
+        someBoolean ? 'someCss' : ['anotherCssClass', 'andAnotherClass']
+    }
     number('someNumberFieldInClass').model(property('someField'))
+
+    ['one', 'two', 'three', 'four', 'five'].listView('listView) {
+        div('item') {
+            outputMarkupId = true
+            ajaxLink('link') {
+                label('label').model(this.property('classProperty')
+            }
+        }.css('someCssForItem').visible {
+         someBoolean ? true : false
+        }
+    }
+
     visible {
         this.input1 != this.input2
     }
+
     submit {
         println this.input1 + this.input2
     }
