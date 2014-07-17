@@ -28,16 +28,18 @@ form('wicketForm') {
     }
     number('someNumberFieldInClass').model(property('someField'))
 
-    ['one', 'two', 'three', 'four', 'five'].listView('listView) {
+    ['one', 'two', 'three', 'four', 'five'].listView('listView') {
         div('item') {
             outputMarkupId = true
             ajaxLink('link') {
                 label('label').model(this.property('classProperty')
             }
         }.css('someCssForItem').visible {
-         someBoolean ? true : false
+           someBoolean ? true : false
         }
     }
+
+    'someText'.toLabel('someId') // yes any object can be converted to label :)
 
     visible {
         this.input1 != this.input2
