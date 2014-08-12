@@ -1,5 +1,8 @@
 package test.web
 
+import org.apache.wicket.ajax.AjaxRequestTarget
+import org.apache.wicket.ajax.markup.html.AjaxLink
+
 class GemsPage extends TemplatePage {
     @Override
     protected void onInitialize() {
@@ -8,6 +11,21 @@ class GemsPage extends TemplatePage {
             cell('id')
             cell('name')
             cell('surname')
+            cell('action') {
+                item { id, imodel ->
+                    ajaxLink(id) {
+                        body = 'Click me!'.toLoadModel()
+                        model = imodel
+                        click { AjaxRequestTarget t, AjaxLink<Person> link ->
+                            t.appendJavaScript("alert('$link.model.object.name " +
+                                    "$link.model.object.surname selected')")
+                        }
+                    }
+                }
+                it.css {
+                    ['btn', 'btn-primary']
+                }
+            }
             list { offset ->
                 Person.generate(offset)
             }
