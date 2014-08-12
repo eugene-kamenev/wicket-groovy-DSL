@@ -4,6 +4,11 @@ import org.apache.wicket.ajax.AjaxRequestTarget
 import org.apache.wicket.ajax.markup.html.AjaxLink
 
 class GemsPage extends TemplatePage {
+    static final Closure alert = { AjaxRequestTarget target, AjaxLink<Person> link ->
+        target.appendJavaScript("alert('$link.model.object.name " +
+                "$link.model.object.surname selected')")
+    }
+
     @Override
     protected void onInitialize() {
         super.onInitialize()
@@ -17,8 +22,7 @@ class GemsPage extends TemplatePage {
                         body = 'Click me!'.toLoadModel()
                         model = imodel
                         click { AjaxRequestTarget t, AjaxLink<Person> link ->
-                            t.appendJavaScript("alert('$link.model.object.name " +
-                                    "$link.model.object.surname selected')")
+                            alert(t, link)
                         }
                     }
                 }
