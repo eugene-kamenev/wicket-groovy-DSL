@@ -298,8 +298,11 @@ class WicketDSL<M extends Serializable> {
     /**
      * Shortcut for AjaxLink
      * Usage example:
-     * ajaxLink('markupId') { AjaxLink<T> link ->
+     * ajaxLink('markupId') { link ->
      *     // link content
+     *     click { AjaxRequestTarget t, AjaxLink<T> link ->
+     *
+     *     }
      * }
      * @param parent
      * @param id
