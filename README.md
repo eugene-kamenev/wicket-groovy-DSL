@@ -41,7 +41,7 @@ label('markupId') { label ->
 ###Form
 ```groovy
 form('markupId') { form ->
-     // link content
+     // form content
      submit { Form<T> form ->
          // onSubmit event here
      }
@@ -51,12 +51,24 @@ form('markupId') { form ->
 ```groovy
 ajaxForm('markupId') { form ->
      submit { AjaxRequestTarget t, Form<T> form ->
-         // onClick event here
+         // onSubmit event here
      }
 }
 ```
+###AjaxEvent
+```groovy
+label('markupId').ajaxEvent('onclick') { AjaxRequestTarget target ->
+    // process event here
+}
 
-And much more. Take a look at [WicketDSL Class](core/src/main/groovy/wicket/groovy/WicketDSL.groovy)
+Also DSL contains useful shortcut methods like this:
+
+```groovy
+serializableObject.toLoadModel() // wrap object with loadable detachable model
+serializableObject.toLabel('markupId') // convert to Label
+list.toDropDown('markupId') // convert to DropDownChoice
+```
+And much more. Take a look at [WicketDSL class](core/src/main/groovy/wicket/groovy/WicketDSL.groovy)
 
 ### Gems package
 For now this package includes only GroovyDataTable and InfiniteScrollTable classes created by me.
