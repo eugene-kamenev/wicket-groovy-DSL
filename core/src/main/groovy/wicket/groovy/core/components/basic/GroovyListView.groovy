@@ -12,7 +12,7 @@ class GroovyListView<T> extends ListView<T> implements WicketComponentTrait<T> {
     Closure onItem
 
     GroovyListView(String id, List<T> list, Closure closure = null) {
-        super(id, list)
+        super(id, list as List<T>)
         this.onItem = closure
     }
 

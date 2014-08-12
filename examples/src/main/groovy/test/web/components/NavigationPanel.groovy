@@ -2,6 +2,7 @@ package test.web.components
 
 import org.apache.wicket.markup.html.panel.Panel
 import test.web.FormsPage
+import test.web.GemsPage
 import test.web.ListViewPage
 import test.web.LoginPage
 import test.web.VariousPage
@@ -19,9 +20,10 @@ class NavigationPanel extends Panel {
             label('label').model('Various Examples'.toLoadModel())
         }
         bookmarkLink('login', LoginPage) {
-            label('label') {
-                model 'Login Example'.toLoadModel()
-            }
+            label('label').model 'Login Example'.toLoadModel()
+        }
+        bookmarkLink('gems', GemsPage) {
+            label('label').model 'GemsPage'.toLoadModel()
         }
     }
 }

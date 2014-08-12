@@ -1,18 +1,22 @@
 package wicket.groovy.core.traits
 
+import groovy.transform.CompileStatic
+import groovy.transform.TypeCheckingMode
 import org.apache.wicket.ajax.AjaxRequestTarget
 import org.apache.wicket.markup.html.form.Form
 
 /**
+ * Basic component trait, that overrides
+ * forms, buttons default methods
+ *
  * @author Eugene Kamenev @eugenekamenev
  */
+@CompileStatic
 trait WicketFormTrait<T> extends WicketComponentTrait<T> {
+
     void onSubmit() {
-        if (override?.submit) {
-            override.submit.call(this)
-        } else {
-            super.onSubmit()
-        }
+        override?.submit ?
+                override.submit.call(this) : null
     }
 
     void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -22,11 +26,10 @@ trait WicketFormTrait<T> extends WicketComponentTrait<T> {
             } else {
                 this.override.submit.call(target)
             }
-        } else {
-            super.onSubmit(target, form)
         }
     }
 
+    @CompileStatic(TypeCheckingMode.SKIP)
     void onError(AjaxRequestTarget target, Form<?> form) {
         if (this.override?.error) {
             if (this.override.error.maximumNumberOfParameters > 1) {
@@ -39,6 +42,7 @@ trait WicketFormTrait<T> extends WicketComponentTrait<T> {
         }
     }
 
+    @CompileStatic(TypeCheckingMode.SKIP)
     void onValidate() {
         if (override?.validate) {
             this.updateFormComponentModels();
@@ -48,6 +52,7 @@ trait WicketFormTrait<T> extends WicketComponentTrait<T> {
         }
     }
 
+    @CompileStatic(TypeCheckingMode.SKIP)
     void onError() {
         if (override?.error) {
             override.error.call(this)

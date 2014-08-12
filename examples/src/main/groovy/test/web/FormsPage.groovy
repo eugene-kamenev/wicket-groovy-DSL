@@ -1,5 +1,8 @@
 package test.web
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class FormsPage extends TemplatePage {
     private Integer sum = 0
     private Integer first

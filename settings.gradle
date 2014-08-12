@@ -1,5 +1,6 @@
 rootProject.name = 'wicket-groovy-dsl'
 
 include ':core'
+include ':gems'
 include ':examples'
 

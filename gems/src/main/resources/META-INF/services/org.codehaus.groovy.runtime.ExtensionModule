@@ -1,0 +1,3 @@
+moduleName=wicket-dsl-gems
+moduleVersion=1.0
+extensionClasses=wicket.groovy.WicketGemsDSL

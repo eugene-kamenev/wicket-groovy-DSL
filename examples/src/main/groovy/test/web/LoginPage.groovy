@@ -1,5 +1,6 @@
 package test.web
 
+import groovy.transform.CompileStatic
 import org.apache.wicket.markup.html.panel.FeedbackPanel
 
 class LoginPage extends TemplatePage {
@@ -11,8 +12,8 @@ class LoginPage extends TemplatePage {
         super.onInitialize()
         statelessForm('login') {
             it + new FeedbackPanel('feedback')
-            text('juname').model(this.property('juname'))
-            password('jup').model(this.property('jup'))
+            text('juname').model(this.property('juname', false))
+            password('jup').model(this.property('jup', false))
             submit {
                 this.juname == this.jup ? info('Login Successful') : error('Login failed');
             }

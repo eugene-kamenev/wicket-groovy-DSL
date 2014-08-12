@@ -8,7 +8,7 @@ allprojects {
         mavenLocal()
     }
 
-    def groovy = '2.3.4'
+    def groovy = '2.3.6'
     def wicket = '6.16.0'
 
     dependencies {

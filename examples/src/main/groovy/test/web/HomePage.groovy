@@ -1,7 +1,7 @@
 package test.web
 
-class HomePage extends TemplatePage {
-    HomePage() {
+import groovy.transform.CompileStatic
 
-    }
+@CompileStatic
+class HomePage extends TemplatePage {
 }

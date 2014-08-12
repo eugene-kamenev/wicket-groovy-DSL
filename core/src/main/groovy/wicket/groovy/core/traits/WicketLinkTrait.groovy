@@ -3,6 +3,9 @@ package wicket.groovy.core.traits
 import org.apache.wicket.ajax.AjaxRequestTarget
 
 /**
+ * Basic component trait, that overrides
+ * link, ajaxlink default methods
+ *
  * @author Eugene Kamenev @eugenekamenev
  */
 trait WicketLinkTrait<T> extends WicketComponentTrait<T> {
@@ -21,7 +24,7 @@ trait WicketLinkTrait<T> extends WicketComponentTrait<T> {
 
     void onClick() {
         if (this.override?.click) {
-            //this.override.click.delegate = this;
+            this.override.click.delegate = this;
             this.override.click.call(this)
         } else {
             super.onClick()

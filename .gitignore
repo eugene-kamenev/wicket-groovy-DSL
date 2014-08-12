@@ -1,1 +1,5 @@
-examples/build.gradle
+.idea/*
+examples/examples.iml
+core/core.iml
+gems/gems.iml
+wicket-groovy-dsl.iml
