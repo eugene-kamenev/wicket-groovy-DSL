@@ -60,7 +60,7 @@ ajaxForm('markupId') { form ->
 label('markupId').ajaxEvent('onclick') { AjaxRequestTarget target ->
     // process event here
 }
-
+```
 Also DSL contains useful shortcut methods like this:
 
 ```groovy
@@ -80,7 +80,7 @@ infiniteTable('table') {
             cell('surname')
             cell('action') {
                 item { id, imodel ->
-                    new PersonActionPanel(id, model)
+                    new PersonActionPanel(id, imodel)
                 }
                 it.css {
                     ['btn', 'btn-primary']
