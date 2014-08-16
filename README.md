@@ -74,6 +74,22 @@ def fragment = new UserFragment() // there is a model with User object inside
 label('name').setModel(fragment.property(User.class) { it.name })
 label('townTitle').setModel(fragment.property(User.class) { it.town.title })
 ```
+#### How TypeSafe PropertyModel works
+[WicketDSL](core/src/main/groovy/wicket/groovy/WicketDSL.groovy) property method closure is declared as:
+```groovy
+static <I extends Serializable, T extends Component, S extends Serializable> IModel<I> property(T component, Class<S> clazz,
+                                                                                                    @DelegatesTo(value = S, strategy = Closure.DELEGATE_ONLY)
+                                                                                                    @ClosureParams(value = FromString, options = 'S')
+                                                                                                    Closure<I> closure)
+```
+So, when you call it with User.class, your IDE and compiler will think that closure delegates to the User object instance. But we are fooling them all.
+Actually your closure will be delegated to [TypeSafeModelBuilder](core/src/main/groovy/wicket/groovy/core/helpers/TypeSafeModelBuilder.groovy) that will build object property notation string.
+For example if we will write:
+```groovy
+fragment.property(User.class) { it.town.title }
+```
+TypeSafeModelBuilder will build the string 'town.title' and create new PropertyModel<I>('town.title', model)
+What do you think about this? It is groovy way.
 
 Also DSL contains useful shortcut methods like this:
 
