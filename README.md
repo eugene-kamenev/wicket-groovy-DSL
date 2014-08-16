@@ -61,6 +61,20 @@ label('markupId').ajaxEvent('onclick') { AjaxRequestTarget target ->
     // process event here
 }
 ```
+###TypeSafe PropertyModel
+```groovy
+def model = new Model<User>(user)
+label('username').setModel(model.property { it.name } ) // property method return IModel<String>
+label('eventCount').setModel(model.property { it.eventCount } ) // property method return IModel<Integer>
+label('town').setModel(model.property { it.town }) // property method return IModel<Town>
+
+// or if we want to get type safe property model from component
+
+def fragment = new UserFragment() // there is a model with User object inside
+label('name').setModel(fragment.property(User.class) { it.name })
+label('townTitle').setModel(fragment.property(User.class) { it.town.title })
+```
+
 Also DSL contains useful shortcut methods like this:
 
 ```groovy
