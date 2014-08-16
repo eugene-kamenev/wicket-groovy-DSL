@@ -24,9 +24,10 @@ import wicket.groovy.core.components.ajax.GroovyAjaxButton
 import wicket.groovy.core.components.ajax.GroovyAjaxLink
 import wicket.groovy.core.components.basic.*
 import wicket.groovy.core.components.form.*
+import wicket.groovy.core.helpers.TypeSafeModelBuilder
 
 /**
- * Groovy Wicket DSL class, main magic is here :)
+ * Groovy Wicket DSL class, main magic happens here :)
  * Methods of this class auto-append to first parameter object instances by Groovy Extension Module
  * @author @eugenekamenev
  * @param < M >
@@ -176,7 +177,7 @@ class WicketDSL<M extends Serializable> {
      * @param closure
      * @return
      */
-    static <T> LoadableDetachableModel<T> loadModel(T optional, Closure<T> closure) {
+    static <T> LoadableDetachableModel<T> loadModel(optional, Closure<T> closure) {
         new LoadableDetachableModel() {
             @Override
             protected Object load() {
@@ -761,6 +762,46 @@ class WicketDSL<M extends Serializable> {
      */
     static <T extends Component> T compoundModel(T component, Component modelComponent) {
         component.setDefaultModel(new CompoundPropertyModel(modelComponent))
+    }
+
+    /**
+     * Creates Type safe PropertyModel from component model
+     * Usage:
+     * def fragment = new UserFragment() // there is a model with User object inside
+     * label('name').setModel(fragment.property(User.class) { it.name })
+     * label('townTitle').setModel(fragment.property(User.class) { it.town.title })
+     *
+     * @param component
+     * @param clazz
+     * @param closure
+     * @return
+     */
+    static <I extends Serializable, T extends Component, S extends Serializable> IModel<I> property(T component, Class<S> clazz,
+                                                                                                    @DelegatesTo(value = S, strategy = Closure.DELEGATE_ONLY) @ClosureParams(value = FromString, options = 'S')
+                                                                                                            Closure<I> closure) {
+        def object = new TypeSafeModelBuilder()
+        closure.delegate = object
+        closure.call(object)
+        new PropertyModel<I>(component.getDefaultModel(), object.notation)
+    }
+    /**
+     * Creates Type safe PropertyModel
+     * Usage:
+     * def model = new Model<User>(user)
+     * model.property { it.name }
+     * model.property { it.town.title }
+     *
+     * @param model
+     * @param closure
+     * @return
+     */
+    static <A extends Serializable, I extends Serializable, S extends IModel<A>> IModel<I> property(S model,
+                                                                                                    @DelegatesTo(value = A, strategy = Closure.DELEGATE_ONLY)
+                                                                                                    @ClosureParams(value = FromString, options = 'A') Closure<I> closure) {
+        def object = new TypeSafeModelBuilder()
+        closure.delegate = object
+        closure.call(object)
+        new PropertyModel<I>(model, object.notation)
     }
 
     /**
