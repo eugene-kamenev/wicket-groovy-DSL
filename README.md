@@ -13,6 +13,65 @@ But with some little, yet powerful Groovy DSL written, we can extend Wicket to s
     1. Core - core package
     2. Gems - package where I will collect some custom groovy components with its own dsl methods
     3. Examples - package contains simple examples of dsl-core and gems packages
+###Usage
+```groovy
+...
+    form('wicketForm') {
+        model(compoundModel(this))
+        text 'input1'
+        text 'input2'
+        email 'emailInput'
+        url 'urlInput'
+        password 'passwordInput'
+        
+        submit { 
+            println this.input1 + this.input2
+        }
+        visible { 
+            this.input1 != this.input2 
+        }
+        error {  
+            println 'Form validation failed'
+        } 
+    }
+
+    ['one', 'two', 'three'].listView('listView') { ListItem<String> item ->
+        item.label 'itemLabel', item.model
+    }
+```
+Instead of verbose Java:
+```java
+...
+   Form form = new Form("wicketForm", new CompoundPropertyModel(this)) {
+        @Override
+        public void onSubmit(){
+            System.out.println(MyPage.this.input1 + MyPage.this.input2);
+        }
+        @Override
+        public boolean isVisible() {
+            // just for example :)
+            !MyPage.this.input1.equals(MyPage.this.input2);
+        }
+        @Override
+        public void onError() {
+            System.out.println("Form validation failed");
+        }
+   }
+   form.add(new TextField("input1"));
+   form.add(new TextField("input2"));
+   form.add(new EmailTextField("emailInput"));
+   form.add(new UrlTextField("urlInput"));
+   form.add(new PasswordTextField("emailInput"));
+   add(form);
+   ArrayList<String> list = new ArrayList<>();
+   list.add("one"); list.add("two"); list.add("three");
+   add(new ListView("listView", list) {
+        @Override
+        protected void populateItem(ListItem<T> item) {
+            item.add(new Label("itemLabel", item.getModel()));
+        }
+   })
+```
 
 ###DSL Methods
 You can start using these methods in any places of your components, just remember that usually closure delegates to it.
