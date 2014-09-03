@@ -148,7 +148,6 @@ For example if we will write:
 fragment.property(User.class) { it.town.title }
 ```
 TypeSafeModelBuilder will build the string 'town.title' and create new PropertyModel<I>('town.title', model)
-What do you think about this? It is groovy way.
 
 Also DSL contains useful shortcut methods like this:
 
@@ -160,10 +159,30 @@ list.toDropDown('markupId') // convert to DropDownChoice
 And much more. Take a look at [WicketDSL class](core/src/main/groovy/wicket/groovy/WicketDSL.groovy)
 
 ### Gems package
-For now this package includes only GroovyDataTable and InfiniteScrollTable classes created by me.
-Use it like this:
+For now this package includes only GroovyDataTable (Wicket with jQuery DataTables integrated) and InfiniteScrollTable (jQuery DataTable with infinite scrolling feature) classes created by me.
+These table components are self-written, no wicket-stuff datatable components used.
+Use them like this:
 ```groovy
-infiniteTable('table') {
+table('tableId') {
+            cell('id')
+            cell('name')
+            cell('surname')
+            cell('action') {
+                item { id, imodel ->
+                    new PersonActionPanel(id, imodel)
+                }
+                it.css {
+                    ['btn', 'btn-primary']
+                }
+            }
+            list { offset ->
+                Person.getAll(offset)
+            }
+        }
+```
+and infinite scrolling one:
+```groovy
+infiniteTable('tableId') {
             cell('id')
             cell('name')
             cell('surname')
