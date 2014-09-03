@@ -164,40 +164,41 @@ These table components are self-written, no wicket-stuff datatable components us
 Use them like this:
 ```groovy
 table('tableId') {
-            cell('id')
-            cell('name')
-            cell('surname')
-            cell('action') {
-                item { id, imodel ->
-                    new PersonActionPanel(id, imodel)
-                }
-                it.css {
-                    ['btn', 'btn-primary']
-                }
-            }
-            list { offset ->
-                Person.getAll(offset)
-            }
+    cell('id')
+    cell('name')
+    cell('surname')
+    cell('action') {
+        item { id, imodel ->
+                new PersonActionPanel(id, imodel)
         }
+        it.css {
+                    ['btn', 'btn-primary']
+        }
+    }
+    
+    list {
+        Person.getAll()
+    }
+}
 ```
 and infinite scrolling one:
 ```groovy
 infiniteTable('tableId') {
-            cell('id')
-            cell('name')
-            cell('surname')
-            cell('action') {
-                item { id, imodel ->
-                    new PersonActionPanel(id, imodel)
-                }
-                it.css {
-                    ['btn', 'btn-primary']
-                }
-            }
-            list { offset ->
-                Person.getAll(offset)
-            }
+    cell('id')
+    cell('name')
+    cell('surname')
+    cell('action') {
+        item { id, imodel ->
+            new PersonActionPanel(id, imodel)
         }
+        it.css {
+            ['btn', 'btn-primary']
+        }
+    }
+    list { offset ->
+            Person.getAll(offset)
+    }
+}
 ```
 
 #### Operators overloaded:
