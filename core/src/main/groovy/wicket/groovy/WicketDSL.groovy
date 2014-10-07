@@ -1,5 +1,4 @@
 package wicket.groovy
-
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
 import groovy.transform.stc.ClosureParams
@@ -25,30 +24,29 @@ import wicket.groovy.core.components.ajax.GroovyAjaxLink
 import wicket.groovy.core.components.basic.*
 import wicket.groovy.core.components.form.*
 import wicket.groovy.core.helpers.TypeSafeModelBuilder
-
+import wicket.groovy.core.model.EnumModel
 /**
- * Groovy Wicket DSL class, main magic happens here :)
+ * Groovy Wicket DSL class, main magic is here :)
  * Methods of this class auto-append to first parameter object instances by Groovy Extension Module
  * @author @eugenekamenev
- * @param < M >
  */
 @CompileStatic
-class WicketDSL<M extends Serializable> {
+class WicketDSL {
 
     /**
      * Shortcut for WebMarkupContainer
      * Usage Example:
      * div('markupId') { div ->
      *     // another components here auto-attached to WebMarkupContainer
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends GroovyWebMarkupContainer<M>> T div(C parent, String id,
-                                                                                    @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                                    @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+    static <M extends Serializable, T extends GroovyWebMarkupContainer<M>> T div(parent, String id,
+                                                                                 @ClosureParams(value = FromString, options = 'T')
+                                                                                 @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                         Closure closure = null) {
         build(parent, new GroovyWebMarkupContainer(id), closure)
     }
 
@@ -57,15 +55,14 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * image('markupId') { image ->
      *     // set image details here
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends GroovyImage<M>> T image(C parent, String id,
-                                                                         @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                         @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+    static <M extends Serializable, T extends GroovyImage<M>> T image(parent, String id,
+                                                                      @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                      @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
 
         build(parent, new GroovyImage(id), closure)
     }
@@ -75,21 +72,20 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * fragment('id', 'fragmentMarkupId') { fragment ->
      *     // fragment children here
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param markupId
      * @param addToParent
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends GroovyFragment<M>> T fragment(C parent, String id, String markupId, boolean addToParent = true,
-                                                                               @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                               @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+    static <M extends Serializable, T extends GroovyFragment<M>> T fragment(parent, String id, String markupId, boolean addToParent = true,
+                                                                            @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                            @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
         if (addToParent) {
-            build(parent, new GroovyFragment(id, markupId, parent), closure)
+            build(parent, new GroovyFragment(id, markupId, parent as MarkupContainer), closure)
         } else {
-            build(null, new GroovyFragment(id, markupId, parent), closure)
+            build(null, new GroovyFragment(id, markupId, parent as MarkupContainer), closure)
         }
     }
 
@@ -98,16 +94,15 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * listView('markupId') { item ->
      *     // populateItem here
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param onItem
      * @return
      */
-    static <I extends ListItem<M>, C extends MarkupContainer, T extends GroovyListView<M>> T listView(C parent, String id,
-                                                                                                      @DelegatesTo(value = I, strategy = Closure.DELEGATE_FIRST)
-                                                                                                      @ClosureParams(value = FromString, options = 'I')
-                                                                                                              Closure onItem = null) {
+    static <M extends Serializable, I extends ListItem<M>, T extends GroovyListView<M>> T listView(parent, String id,
+                                                                                                   @DelegatesTo(value = I, strategy = Closure.DELEGATE_FIRST)
+                                                                                                   @ClosureParams(value = FromString, options = 'I')
+                                                                                                           Closure onItem = null) {
         build(parent, new GroovyListView<M>(id, null as List, onItem)) as T
     }
 
@@ -116,17 +111,16 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * listView('markupId', listModel) { item ->
      *     // populateItem here
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param model
      * @param onItem
      * @return
      */
-    static <I extends ListItem<M>, C extends MarkupContainer, T extends GroovyListView<M>> T listView(C parent, String id, IModel<? extends List> model,
-                                                                                                      @DelegatesTo(value = I, strategy = Closure.DELEGATE_FIRST)
-                                                                                                      @ClosureParams(value = FromString, options = 'I')
-                                                                                                              Closure onItem = null) {
+    static <M extends Serializable, I extends ListItem<M>, T extends GroovyListView<M>> T listView(parent, String id, IModel<? extends List> model,
+                                                                                                   @DelegatesTo(value = I, strategy = Closure.DELEGATE_FIRST)
+                                                                                                   @ClosureParams(value = FromString, options = 'I')
+                                                                                                           Closure onItem = null) {
         build(parent, new GroovyListView<M>(id, model, onItem)) as T
     }
 
@@ -135,17 +129,16 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * listView('markupId', list) { item ->
      *     // populateItem here
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param list
      * @param onItem
      * @return
      */
-    static <I extends ListItem, C extends MarkupContainer, T extends GroovyListView<M>> T listView(C parent, String id, List list,
-                                                                                                   @DelegatesTo(value = I, strategy = Closure.DELEGATE_FIRST)
-                                                                                                   @ClosureParams(value = FromString, options = 'I')
-                                                                                                           Closure onItem = null) {
+    static <M extends Serializable, I extends ListItem, T extends GroovyListView<M>> T listView(parent, String id, List list,
+                                                                                                @DelegatesTo(value = I, strategy = Closure.DELEGATE_FIRST)
+                                                                                                @ClosureParams(value = FromString, options = 'I')
+                                                                                                        Closure onItem = null) {
         build(parent, new GroovyListView<M>(id, list, onItem)) as T
     }
 
@@ -154,26 +147,23 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * list.listView('markupId') { item ->
      *     // populateItem here
-     * }
-     *  @param list
+     *}* @param list
      * @param id
      * @param onItem
      * @return
      */
-    static <I extends ListItem<M>, T extends GroovyListView<M>> T listView(List list, String id,
-                                                                           @DelegatesTo(value = I, strategy = Closure.DELEGATE_FIRST)
-                                                                           @ClosureParams(value = FromString, options = 'I')
-                                                                                   Closure onItem = null) {
+    static <M extends Serializable, I extends ListItem<M>, T extends GroovyListView<M>> T listView(List list, String id,
+                                                                                                   @DelegatesTo(value = I, strategy = Closure.DELEGATE_FIRST)
+                                                                                                   @ClosureParams(value = FromString, options = 'I')
+                                                                                                           Closure onItem = null) {
         new GroovyListView<M>(id, list, onItem)
     }
 
     /**
      * Shortcut for producing LoadableDetachableModel
      * Usage example:
-     * def imodel = anyObject.loadModel {
-     *      // modelObject return
-     * }
-     * @param optional
+     * def imodel = anyObject.loadModel {*      // modelObject return
+     *}* @param optional
      * @param closure
      * @return
      */
@@ -191,20 +181,17 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * statelessForm('markupId') { form ->
      *     //form content here
-     *     submit {
-     *     // onSubmit
-     *   }
-     * }
-     * @param parent
+     *     submit {*     // onSubmit
+     *}*}* @param parent
      * @param id
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends GroovyStatelessForm<M>> T statelessForm(C parent, String id,
-                                                                                         @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                                         @ClosureParams(value = FromString, options = 'T')
-                                                                                                 Closure closure = null) {
-        build(parent, new GroovyStatelessForm<M>(id), closure)
+    static <T extends GroovyStatelessForm> T statelessForm(parent, String id,
+                                                                                      @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                      @ClosureParams(value = FromString, options = 'T')
+                                                                                              Closure closure = null) {
+        build(parent, new GroovyStatelessForm(id), closure)
     }
 
     /**
@@ -212,18 +199,15 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * form('markupId') { form ->
      *     //form content here
-     *     submit {
-     *     // onSubmit
-     *    }
-     * }
-     * @param parent
+     *     submit {*     // onSubmit
+     *}*}* @param parent
      * @param id
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends GroovyForm<M>> T form(C parent, String id,
-                                                                       @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                       @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+    static <M extends Serializable, T extends GroovyForm<M>> T form(parent, String id,
+                                                                    @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                    @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
         build(parent, new GroovyForm<M>(id), closure)
     }
 
@@ -234,22 +218,20 @@ class WicketDSL<M extends Serializable> {
      *     // form content here
      *     submit { AjaxRequestTarget target, Form form ->
      *
-     * }
-     * or
+     *}* or
      * ajaxForm('markupId') { form ->
      *     // form content here
      *     submit { AjaxRequestTarget target ->
      *
-     * }
-     *
+     *}*
      * @param parent
      * @param id
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends GroovyForm<M>> T ajaxForm(C parent, String id,
-                                                                           @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                           @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+    static <M extends Serializable, T extends GroovyForm<M>> T ajaxForm(parent, String id,
+                                                                        @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                        @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
         def form = form(parent, id, closure)
         Closure submit = form.override.remove('submit')
         Closure error = form.override.remove('error')
@@ -265,17 +247,16 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * bookmarkLink('markupId') { link ->
      *     // bookmarklink delegate
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param target
      * @param closure
      * @return
      */
     @CompileStatic(TypeCheckingMode.SKIP)
-    static <C extends MarkupContainer, T extends GroovyBookmarkablePageLink> T bookmarkLink(C parent, String id, Class<? extends Page> target,
-                                                                                            @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                                            @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+    static <T extends GroovyBookmarkablePageLink> T bookmarkLink(parent, String id, Class<? extends Page> target,
+                                                                                         @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                         @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
         build(parent, new GroovyBookmarkablePageLink(id, target, null), closure)
     }
 
@@ -284,16 +265,15 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * label('markupId') { label ->
      *
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, M, T extends GroovyLabel<M>> T label(C parent, String id,
-                                                                            @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                            @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
-        build(parent, new GroovyLabel(id), closure)
+    static <M extends Serializable, T extends GroovyLabel<M>> T label(Object parent, String id,
+                                                                      @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                      @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+        build(parent, new GroovyLabel<M>(id), closure)
     }
 
     /**
@@ -303,16 +283,14 @@ class WicketDSL<M extends Serializable> {
      *     // link content
      *     click { AjaxRequestTarget t, AjaxLink<T> link ->
      *
-     *     }
-     * }
-     * @param parent
+     *}*}* @param parent
      * @param id
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends GroovyAjaxLink<M>> T ajaxLink(C parent, String id,
-                                                                               @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                               @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+    static <M extends Serializable, T extends GroovyAjaxLink<M>> T ajaxLink(parent, String id,
+                                                                            @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                            @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
         build(parent, new GroovyAjaxLink<M>(id), closure)
     }
 
@@ -324,27 +302,29 @@ class WicketDSL<M extends Serializable> {
      * @param container
      * @return
      */
-    static <C extends Component> IModel<M> model(C container) {
+    static <M extends Serializable, C extends Component> IModel<M> model(C container) {
         container.getDefaultModel()
+    }
+
+    static <C extends Component> void model(C container, IModel model) {
+        container.setDefaultModel(model)
     }
 
     /**
      * Shortcut for AjaxConfirmationLink
      * Usage example:
-     * ajaxConfirmLink('markupId', text) {
-     *  click { AjaxRequestTarget t, AjaxLink<T> link ->
+     * ajaxConfirmLink('markupId', text) {*  click { AjaxRequestTarget t, AjaxLink<T> link ->
      *         // click logic here
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param params
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends AjaxLink<M>> T ajaxConfirmLink(C parent, String id, String text,
-                                                                                @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                                @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
-        def child = new GroovyAjaxLink<M>(id) {
+    static <M extends Serializable, T extends AjaxLink<M>> T ajaxConfirmLink(parent, String id, String text,
+                                                                             @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                             @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+        def child = new GroovyAjaxLink(id) {
             @Override
             protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
                 super.updateAjaxAttributes(attributes);
@@ -361,21 +341,18 @@ class WicketDSL<M extends Serializable> {
      * Shortcut for creating new Link
      * Usage example:
      * link('markupId') { link ->
-     *     click {
-     *         // click here
-     *     }
-     * }
-     *
+     *     click {*         // click here
+     *}*}*
      * param parent
      * @param id
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends GroovyLink<M>> T link(C parent, String id,
-                                                                       @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                       @ClosureParams(value = FromString, options = 'T')
-                                                                               Closure closure = null) {
-        build(parent, new GroovyLink<T>(id), closure)
+    static <M extends Serializable, T extends GroovyLink<M>> T link(parent, String id,
+                                                                    @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                    @ClosureParams(value = FromString, options = 'T')
+                                                                            Closure closure = null) {
+        build(parent, new GroovyLink<M>(id), closure)
     }
 
     /**
@@ -383,15 +360,15 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * text('markupId') { field ->
      *
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends GroovyTextField<M>> T text(C parent, String id,
-                                                                            @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST) @ClosureParams(value = FromString, options = 'T')
-                                                                                    Closure closure = null) {
+    static <M extends Serializable, T extends GroovyTextField<M>> T text(parent, String id,
+                                                                         @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                         @ClosureParams(value = FromString, options = 'T')
+                                                                                 Closure closure = null) {
         build(parent, new GroovyTextField(id), closure)
     }
 
@@ -400,13 +377,12 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * password('markupId') { field ->
      *
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends GroovyPasswordTextField> T password(C parent, String id,
+    static <C extends MarkupContainer, T extends GroovyPasswordTextField> T password(parent, String id,
                                                                                      @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
                                                                                      @ClosureParams(value = FromString, options = 'T')
                                                                                              Closure closure = null) {
@@ -418,16 +394,15 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * email('markupId') { field ->
      *
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends GroovyEmailField> T email(C parent, String id,
-                                                                           @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                           @ClosureParams(value = FromString, options = 'T')
-                                                                                   Closure closure = null) {
+    static <M extends Serializable, T extends GroovyEmailField> T email(parent, String id,
+                                                                        @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                        @ClosureParams(value = FromString, options = 'T')
+                                                                                Closure closure = null) {
         build(parent, new GroovyEmailField(id), closure);
     }
 
@@ -436,18 +411,17 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * url('markupId') { field ->
      *
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param url
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends GroovyUrlField> T url(C parent, String id, String url,
-                                                                       @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                       @ClosureParams(value = FromString, options = 'T')
-                                                                               Closure closure = null) {
-        build(parent, new GroovyUrlField(id, url)) as T
+    static <M extends Serializable, T extends GroovyUrlField> T url(parent, String id, String url,
+                                                                    @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                    @ClosureParams(value = FromString, options = 'T')
+                                                                            Closure closure = null) {
+        build(parent, new GroovyUrlField(id, url), closure) as T
     }
 
     /**
@@ -455,16 +429,15 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * number('markupId') { field ->
      *
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends GroovyTextField<BigDecimal>> T number(C parent, String id,
-                                                                                       @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                                       @ClosureParams(value = FromString, options = 'T')
-                                                                                               Closure closure = null) {
+    static <M extends Serializable, T extends GroovyTextField<BigDecimal>> T number(parent, String id,
+                                                                                    @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                    @ClosureParams(value = FromString, options = 'T')
+                                                                                            Closure closure = null) {
         build(parent, new GroovyTextField(id, BigDecimal), closure)
     }
 
@@ -473,16 +446,15 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * dropDown('markupId') { dropDown ->
      *
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends GroovyDropDownChoice<M>> T dropDown(C parent, String id,
-                                                                                     @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                                     @ClosureParams(value = FromString, options = 'T')
-                                                                                             Closure closure = null) {
+    static <M extends Serializable, T extends GroovyDropDownChoice<M>> T dropDown(parent, String id,
+                                                                                  @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                  @ClosureParams(value = FromString, options = 'T')
+                                                                                          Closure closure = null) {
         build(parent, new GroovyDropDownChoice<M>(id), closure)
     }
 
@@ -491,16 +463,15 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * radioChoice('markupId') { field ->
      *
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends GroovyRadioChoice<M>> T radioChoice(C parent, String id,
-                                                                                     @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                                     @ClosureParams(value = FromString, options = 'T')
-                                                                                             Closure closure = null) {
+    static <M extends Serializable, T extends GroovyRadioChoice<M>> T radioChoice(parent, String id,
+                                                                                  @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                  @ClosureParams(value = FromString, options = 'T')
+                                                                                          Closure closure = null) {
         build(parent, new GroovyRadioChoice(id), closure)
     }
 
@@ -509,16 +480,15 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * checkBox('markupId') { field ->
      *
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends GroovyCheckBoxChoice> T checkBox(C parent, String id,
-                                                                                  @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                                  @ClosureParams(value = FromString, options = 'T')
-                                                                                          Closure closure = null) {
+    static <T extends GroovyCheckBoxChoice> T checkBox(parent, String id,
+                                                       @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                       @ClosureParams(value = FromString, options = 'T')
+                                                               Closure closure = null) {
         build(parent, new GroovyCheckBoxChoice(id), closure)
     }
 
@@ -527,16 +497,15 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * checkChoices('markupId') { choices ->
      *
-     * }
-     * @param parent
+     *}* @param parent
      * @param id
      * @param closure
      * @return
      */
-    static <C extends MarkupContainer, T extends GroovyCheckBoxMultipleChoice<M>> T checkChoices(C parent, String id,
-                                                                                                 @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                                                 @ClosureParams(value = FromString, options = 'T')
-                                                                                                         Closure closure = null) {
+    static <M extends Serializable, T extends GroovyCheckBoxMultipleChoice<M>> T checkChoices(parent, String id,
+                                                                                              @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                              @ClosureParams(value = FromString, options = 'T')
+                                                                                                      Closure closure = null) {
         build(parent, new GroovyCheckBoxMultipleChoice<M>(id), closure)
     }
 
@@ -544,15 +513,13 @@ class WicketDSL<M extends Serializable> {
      * Shortcut for creating Wicket choices renderer
      * usually used for entities
      * Usage example:
-     * dropDown('markupId') {
-     *  choicesRenderer(id: 'id', value: 'title')
-     * }
-     * @param choice
+     * dropDown('markupId') {*  choicesRenderer(id: 'id', value: 'title')
+     *}* @param choice
      * @param objectProperty
      * @return
      */
     @CompileStatic(TypeCheckingMode.SKIP)
-    static <A, M, T extends AbstractChoice<M, A>> T choicesRender(
+    static <A, M extends Serializable, T extends AbstractChoice<M, A>> T choicesRender(
             final T choice, final Map objectProperty) {
         choice?.setChoiceRenderer(new IChoiceRenderer() {
             @Override
@@ -568,20 +535,45 @@ class WicketDSL<M extends Serializable> {
         choice
     }
 
+    @CompileStatic(TypeCheckingMode.SKIP)
+    static <A, M extends Serializable, T extends AbstractChoice<M, A>> T choices(
+            T choice, final Map objectProperty) {
+        choice = choicesRender(choice, objectProperty)
+        choice.setChoices((objectProperty?.from as List)?.toListModel())
+    }
+
+    @CompileStatic(TypeCheckingMode.SKIP)
+    static <A, M extends Serializable, T extends AbstractChoice<M, A>> T enumChoices(
+            final T choice, Class<? extends Enum> enumObject) {
+        def list = enumObject.getEnumConstants().toList()
+        choice?.setChoiceRenderer(new IChoiceRenderer() {
+            @Override
+            Object getDisplayValue(Object object) {
+                new EnumModel(object).getObject()
+            }
+
+            @Override
+            String getIdValue(Object object, int index) {
+                Enum.valueOf(enumObject, object.toString())
+            }
+        })
+        choice.setChoices(list)
+        choice
+    }
+
     /**
      * Shortcut for converting IModel<List> of choices into DropDownChoice
      * Usage example:
      * listModel.toDropDown('markupId') { dropDown ->
      *     choicesRenderer(id: 'id', value: 'title')
-     * }
-     * @param choices
+     *}* @param choices
      * @param id
      * @param closure
      * @return
      */
-    static <T extends GroovyDropDownChoice<M>> T toDropDown(IModel<? extends List<M>> choices, String id,
-                                                            @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                            @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+    static <M extends Serializable, T extends GroovyDropDownChoice<M>> T toDropDown(IModel<? extends List<M>> choices, String id,
+                                                                                    @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                    @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
         build(null, new GroovyDropDownChoice<M>(id, null as IModel, choices), closure)
     }
 
@@ -590,15 +582,14 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * list.toDropDown('markupId') { dropDown ->
      *
-     * }
-     * @param choices
+     *}* @param choices
      * @param id
      * @param closure
      * @return
      */
-    static <T extends GroovyDropDownChoice<M>> T toDropDown(List<M> choices, String id,
-                                                            @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                            @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
+    static <M extends Serializable, T extends GroovyDropDownChoice<M>> T toDropDown(List<M> choices, String id,
+                                                                                    @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                                    @ClosureParams(value = FromString, options = 'T') Closure closure = null) {
         build(null, new GroovyDropDownChoice<M>(id, null as IModel, choices), closure)
     }
 
@@ -607,16 +598,15 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * serializable.toLabel('markupId') { label ->
      *
-     * }
-     * @param o
+     *}* @param o
      * @param id
      * @param closure
      * @return
      */
-    static <T extends GroovyLabel<M>> T toLabel(M o, String id,
-                                                @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                @ClosureParams(value = FromString, options = 'T')
-                                                        Closure closure = null) {
+    static <M extends Serializable, T extends GroovyLabel<M>> T toLabel(M o, String id,
+                                                                        @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                        @ClosureParams(value = FromString, options = 'T')
+                                                                                Closure closure = null) {
         toLabel(loadModel(o), id, closure) as T
     }
 
@@ -625,16 +615,15 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * model.toLabel('markupId') { label ->
      *
-     * }
-     * @param model
+     *}* @param model
      * @param id
      * @param closure
      * @return
      */
-    static <T extends GroovyLabel<M>> T toLabel(IModel<M> model, String id,
-                                                @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                @ClosureParams(value = FromString, options = 'T')
-                                                        Closure closure = null) {
+    static <M extends Serializable, T extends GroovyLabel<M>> T toLabel(IModel<M> model, String id,
+                                                                        @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                                        @ClosureParams(value = FromString, options = 'T')
+                                                                                Closure closure = null) {
         def label = label(null, id, closure)
         label.setDefaultModel(model)
         label as T
@@ -645,19 +634,22 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * ajaxBehavior { AjaxRequestTarget t ->
      *
-     * }
-     * @param component
+     *}* @param component
      * @param action
      * @return
      */
-    static <C extends Component, A extends AjaxRequestTarget> C ajaxBehavior(C component,
-                                                                             @ClosureParams(value = FromString, options = 'A') Closure action) {
-        component.add new AbstractDefaultAjaxBehavior() {
+    static <A extends AjaxRequestTarget> AbstractDefaultAjaxBehavior ajaxBehavior(component,
+                                                                                  @ClosureParams(value = FromString, options = 'A') Closure action) {
+        def behavior = new AbstractDefaultAjaxBehavior() {
             @Override
             protected void respond(AjaxRequestTarget target) {
                 action.call(target)
             }
         }
+        if (component instanceof Component) {
+            component.add behavior
+        }
+        behavior
     }
 
     /**
@@ -665,35 +657,36 @@ class WicketDSL<M extends Serializable> {
      * Usage example:
      * ajaxEvent('onclick') { AjaxRequestTarget t ->
      *
-     * }
-     * @param component
+     *}* @param component
      * @param action
      * @return
      */
-    static <C extends Component, A extends AjaxRequestTarget> C ajaxEvent(C component, String action,
-                                                                          @ClosureParams(value = FromString, options = 'A') Closure closure) {
-        component.add new AjaxEventBehavior(action) {
+    static <A extends AjaxRequestTarget> AjaxEventBehavior ajaxEvent(component, String action,
+                                                                     @ClosureParams(value = FromString, options = 'A') Closure closure) {
+        def behavior = new AjaxEventBehavior(action) {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
                 closure.call(target)
             }
         }
+        if (component instanceof Component) {
+            component.add behavior
+        }
+        behavior
     }
 
     /**
      * Shortcut for LoadableDetachableModel
      * Usage example:
-     * serializeable.loadModel {
-     *  // return object here
-     * }
-     * @param o
+     * serializeable.loadModel {*  // return object here
+     *}* @param o
      * @return
      */
     static <T extends Serializable> IModel<T> loadModel(final T o) {
         new LoadableDetachableModel(o) {
             @Override
             protected Object load() {
-                return o
+                null
             }
         }
     }
@@ -721,16 +714,14 @@ class WicketDSL<M extends Serializable> {
      * @return
      */
     static <T extends Component> T css(T component, List<String> list) {
-        component.add(new AttributeAppender('class', Model.of(list.join(' ')))) as T
+        component.add(new AttributeAppender('class', Model.of(' ' + list.join(' ')))) as T
     }
 
     /**
      * Shortcut for css class attribute appender with closure
      * Usage example:
-     * component.css {
-     *     ['ui', 'style', someCondition ? 'negative' : 'positive']
-     * }
-     * @param component
+     * component.css {*     ['ui', 'style', someCondition ? 'negative' : 'positive']
+     *}* @param component
      * @param closure
      * @return
      */
@@ -777,20 +768,18 @@ class WicketDSL<M extends Serializable> {
      * @return
      */
     static <I extends Serializable, T extends Component, S extends Serializable> IModel<I> property(T component, Class<S> clazz,
-                                                                                                    @DelegatesTo(value = S, strategy = Closure.DELEGATE_ONLY) @ClosureParams(value = FromString, options = 'S')
+                                                                                                    @DelegatesTo(value = S, strategy = Closure.DELEGATE_ONLY)
+                                                                                                    @ClosureParams(value = FromString, options = 'S')
                                                                                                             Closure<I> closure) {
         def object = new TypeSafeModelBuilder()
-        closure.delegate = object
-        closure.call(object)
+        object.with(closure)
         new PropertyModel<I>(component.getDefaultModel(), object.notation)
     }
     /**
      * Creates Type safe PropertyModel
      * Usage:
      * def model = new Model<User>(user)
-     * model.property { it.name }
-     * model.property { it.town.title }
-     *
+     * model.property { it.name }* model.property { it.town.title }*
      * @param model
      * @param closure
      * @return
@@ -799,8 +788,7 @@ class WicketDSL<M extends Serializable> {
                                                                                                     @DelegatesTo(value = A, strategy = Closure.DELEGATE_ONLY)
                                                                                                     @ClosureParams(value = FromString, options = 'A') Closure<I> closure) {
         def object = new TypeSafeModelBuilder()
-        closure.delegate = object
-        closure.call(object)
+        object.with(closure)
         new PropertyModel<I>(model, object.notation)
     }
 
@@ -877,7 +865,7 @@ class WicketDSL<M extends Serializable> {
      * @param js
      */
     static void prependToSelf(AjaxRequestTarget t, Component component, String js) {
-        t.prependJavaScript("")
+        t.prependJavaScript("\$('#$component.markupId')")
     }
 
     /**
@@ -890,15 +878,14 @@ class WicketDSL<M extends Serializable> {
         loadModel(object)
     }
 
-    static <T extends List<M>> IModel<List<M>> toLoadModel(final T list) {
-        loadModel(new ListModel(list))
+    static <M extends Serializable, T extends Collection<M>> IModel<List<M>> toListModel(final T list) {
+        new ListModel(list.toList())
     }
 
     /**
      * Shortcut for LoadableDetachableModel
-     * component.setModel {
-     *      //closure here
-     * }.toLoadModel()
+     * component.setModel {*      //closure here
+     *}.toLoadModel()
      * @param closure
      * @return
      */
@@ -906,6 +893,15 @@ class WicketDSL<M extends Serializable> {
         loadModel(null) {
             closure.call()
         }
+    }
+
+    /**
+     * Shortcut for simple model
+     * @param object
+     * @return
+     */
+    static <T extends Serializable> IModel<T> toModel(T object) {
+        Model.of(object)
     }
 
     /**
@@ -927,14 +923,18 @@ class WicketDSL<M extends Serializable> {
      * @param closure
      * @return
      */
-    private static <C extends MarkupContainer, T extends Component> T build(C parent, T child,
-                                                                            @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
-                                                                            @ClosureParams(value = FromString, options = 'T')
-                                                                                    Closure closure = null) {
-        parent?.add(child)
-        closure?.resolveStrategy = Closure.DELEGATE_FIRST
-        closure?.delegate = child
-        closure?.call(child)
+    private static <T extends Component> T build(parent, T child,
+                                                 @DelegatesTo(value = T, strategy = Closure.DELEGATE_FIRST)
+                                                 @ClosureParams(value = FromString, options = 'T')
+                                                         Closure closure = null) {
+        def cloned = closure?.rehydrate(child, closure.owner, closure.thisObject)
+        cloned?.resolveStrategy = Closure.DELEGATE_FIRST
+        cloned?.call(child)
+        if (parent instanceof MarkupContainer) {
+            parent.addOrReplace(child) as T
+        } else if (parent instanceof Closure && parent.delegate instanceof MarkupContainer) {
+            (parent.delegate as MarkupContainer).addOrReplace child
+        }
         child
     }
 
@@ -944,7 +944,7 @@ class WicketDSL<M extends Serializable> {
      * @param component
      * @param js
      */
-    static <T extends Component> T rightShift(Component container, T another) {
+    static <C extends Component, T extends Component> T rightShift(C container, T another) {
         container?.replaceWith another
     }
 
@@ -997,3 +997,5 @@ class WicketDSL<M extends Serializable> {
         map?.findAll { it.value instanceof Closure }
     }
 }
+
+

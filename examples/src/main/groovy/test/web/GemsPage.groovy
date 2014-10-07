@@ -1,8 +1,12 @@
 package test.web
 
+import groovy.transform.CompileStatic
+import groovy.transform.InheritConstructors
 import org.apache.wicket.ajax.AjaxRequestTarget
 import org.apache.wicket.ajax.markup.html.AjaxLink
 
+@InheritConstructors
+@CompileStatic
 class GemsPage extends TemplatePage {
     static final Closure alert = { AjaxRequestTarget target, AjaxLink<Person> link ->
         target.appendJavaScript("alert('$link.model.object.name " +
@@ -21,16 +25,18 @@ class GemsPage extends TemplatePage {
                     ajaxLink(id) {
                         body = 'Click me!'.toLoadModel()
                         model = imodel
-                        click { AjaxRequestTarget t, AjaxLink<Person> link ->
+                        click { AjaxRequestTarget t, AjaxLink link ->
                             alert(t, link)
                         }
                     }
                 }
-                it.css {
-                    ['btn', 'btn-primary']
+                modify {
+                    css {
+                        ['btn', 'btn-primary']
+                    }
                 }
             }
-            list { offset ->
+            list { Long offset ->
                 Person.generate(offset)
             }
         }
@@ -41,10 +47,10 @@ class GemsPage extends TemplatePage {
         String name
         String surname
 
-        static List<Person> generate(long offset) {
+        static List<Person> generate(Long offset) {
             def list = []
             40.times {
-                def id = (offset + 1) * it
+                def id = (offset++) * it
                 list << new Person(id: id, name: "Gomer $id", surname: "Simpson $id")
             }
             list

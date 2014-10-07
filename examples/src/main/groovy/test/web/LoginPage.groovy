@@ -1,8 +1,11 @@
 package test.web
 
 import groovy.transform.CompileStatic
+import groovy.transform.InheritConstructors
 import org.apache.wicket.markup.html.panel.FeedbackPanel
 
+@CompileStatic
+@InheritConstructors
 class LoginPage extends TemplatePage {
     String juname
     String jup
@@ -10,12 +13,13 @@ class LoginPage extends TemplatePage {
     @Override
     protected void onInitialize() {
         super.onInitialize()
-        statelessForm('login') {
-            it + new FeedbackPanel('feedback')
-            text('juname').model(this.property('juname', false))
-            password('jup').model(this.property('jup', false))
+        form('login') { form ->
+            compoundModel(this)
+            form + new FeedbackPanel('feedback')
+            text('juname')
+            password('jup')
             submit {
-                this.juname == this.jup ? info('Login Successful') : error('Login failed');
+                this.juname == this.jup ? info('Login Successful') : error('Login failed')
             }
         }
     }

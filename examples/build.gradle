@@ -1,5 +1,17 @@
 apply plugin: 'war'
 
+sourceSets {
+    main {
+        groovy {
+            srcDir 'src/main/groovy'
+        }
+        resources {
+            srcDir 'src/main/resources/'
+            srcDir 'src/main/groovy/'
+        }
+    }
+}
+
 dependencies {
     compile project(':gems')
 }

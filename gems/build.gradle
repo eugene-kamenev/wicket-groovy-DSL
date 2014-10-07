@@ -1,5 +1,20 @@
 dependencies {
-    compile 'de.agilecoders.wicket.webjars:wicket-webjars:0.4.2'
-    compile 'org.webjars:datatables:1.10.1'
     compile project(':core')
+    compile('de.agilecoders.wicket.webjars:wicket-webjars:0.4.2') {
+        exclude group: 'javassist', module: 'javassist'
+        exclude group: 'org.javassist', module: 'javassist'
+    }
+    compile 'org.webjars:datatables:1.10.1'
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDir 'src/main/groovy'
+        }
+        resources {
+            srcDir 'src/main/resources/'
+            srcDir 'src/main/groovy/'
+        }
+    }
 }

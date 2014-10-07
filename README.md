@@ -1,18 +1,25 @@
-#Apache Wicket Groovy DSL Project 0.3
+#Apache Wicket Groovy DSL Project 0.4
 
 ### Overview
 Apache Wicket is great, and Groovy is also great. This project tries to combine the power of both. However, sometimes Apache Wicket code become damn verbose.
 But with some little, yet powerful Groovy DSL written, we can extend Wicket to simplify common tasks, and to delete over 30-40% of verbose code.
 
 ###Versions used:
-    1. Apache Wicket 6.16.0
-    2. Groovy 2.3.6 (Yes, with Traits :)
+    1. Apache Wicket 6.17.0
+    2. Groovy 2.3.7 (Yes, with Traits :)
     3. Twitter bootstap for some beautify
+    4. And others
 
 ###Modules:
     1. Core - core package
     2. Gems - package where I will collect some custom groovy components with its own dsl methods
     3. Examples - package contains simple examples of dsl-core and gems packages
+
+###Changelog:
+    0.4 - After working with this DSL in real world applications we found some bugs, fixed them. Improved @CompileStatic support,
+    improved IDE support (Eclipse users can you tell me how it works in?). GroovyDataTable bug fixes. New methods added, see changes in
+    [WicketDSL.groovy](core/src/main/groovy/wicket/groovy/WicketDSL.groovy). All files in examples now are with @CompileStatic annotation.
+    0.3 - Main changes from first version, migrated to groovy extension feature
 ###Usage
 ```groovy
 ...
@@ -72,6 +79,9 @@ Instead of verbose Java:
         }
    })
 ```
+### Environment
+I not sure why, but IntelliJ IDEA "Make" does not correctly work with it, so if you want to run examples, you should create
+Run Configuration without it, use gradle build instead. Another options I am using: Oracle JDK 8, IntelliJ IDEA 14, Jetty 9.0.7
 
 ###DSL Methods
 You can start using these methods in any places of your components, just remember that usually closure delegates to it.

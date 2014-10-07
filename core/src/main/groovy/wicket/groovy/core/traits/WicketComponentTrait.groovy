@@ -1,9 +1,12 @@
 package wicket.groovy.core.traits
+
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
 import org.apache.wicket.Component
 import org.apache.wicket.MarkupContainer
 import org.apache.wicket.model.IModel
+import wicket.groovy.WicketDSL
+
 /**
  * Base wicket component trait
  *
@@ -46,7 +49,7 @@ trait WicketComponentTrait<M> implements Serializable {
      * @param visible
      * @return
      */
-    def visible(@DelegatesTo Closure<Boolean> visible) {
+    def visible(Closure<Boolean> visible) {
         this.getOverride().visible = visible
         this
     }
@@ -57,7 +60,7 @@ trait WicketComponentTrait<M> implements Serializable {
      * @param enabled
      * @return
      */
-    def enabled(@DelegatesTo Closure<Boolean> enabled) {
+    def enabled(Closure<Boolean> enabled) {
         this.getOverride().enabled = enabled
         this
     }
@@ -68,8 +71,9 @@ trait WicketComponentTrait<M> implements Serializable {
      * @param closure
      * @return
      */
-    def model(Closure<IModel<?>> closure) {
-        model(closure())
+    @CompileStatic(TypeCheckingMode.SKIP)
+    def model(Closure<IModel> closure) {
+        this.asComponent().model(closure?.call())
     }
 
     /**
@@ -79,9 +83,13 @@ trait WicketComponentTrait<M> implements Serializable {
      * @return
      */
     @CompileStatic(TypeCheckingMode.SKIP)
-    def model(IModel<?> model) {
+    def model(IModel model) {
         this.asComponent().setDefaultModel(model)
         this
+    }
+
+    void model(Serializable object) {
+        this.model(WicketDSL.toLoadModel(object))
     }
 
     /**
@@ -100,18 +108,6 @@ trait WicketComponentTrait<M> implements Serializable {
      */
     MarkupContainer parent() {
         this.asComponent().getParent()
-    }
-
-    /**
-     * Helper method for adding collection components
-     *
-     * @param components collection/array
-     * @return
-     */
-    @CompileStatic(TypeCheckingMode.SKIP)
-    def with(components) {
-        this.asContainer().add(components)
-        this
     }
 
     /**

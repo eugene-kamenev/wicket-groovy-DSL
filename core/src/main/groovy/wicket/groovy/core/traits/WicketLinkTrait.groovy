@@ -24,7 +24,6 @@ trait WicketLinkTrait<T> extends WicketComponentTrait<T> {
 
     void onClick() {
         if (this.override?.click) {
-            this.override.click.delegate = this;
             this.override.click.call(this)
         } else {
             super.onClick()

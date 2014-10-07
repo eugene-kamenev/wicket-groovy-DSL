@@ -1,5 +1,4 @@
 package wicket.groovy.gems
-
 import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference
 import groovy.transform.CompileStatic
 import groovy.transform.InheritConstructors
@@ -7,16 +6,13 @@ import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
 import org.apache.wicket.Application
 import org.apache.wicket.Component
-import org.apache.wicket.markup.head.CssHeaderItem
-import org.apache.wicket.markup.head.IHeaderResponse
-import org.apache.wicket.markup.head.JavaScriptHeaderItem
-import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem
-import org.apache.wicket.markup.head.PriorityHeaderItem
+import org.apache.wicket.markup.head.*
 import org.apache.wicket.markup.html.WebMarkupContainer
 import org.apache.wicket.markup.html.list.ListItem
 import org.apache.wicket.markup.html.list.ListView
 import org.apache.wicket.markup.html.panel.GenericPanel
 import org.apache.wicket.markup.repeater.RepeatingView
+import org.apache.wicket.model.Model
 import org.apache.wicket.request.resource.CssResourceReference
 import org.apache.wicket.request.resource.ResourceReference
 
@@ -41,7 +37,7 @@ class GroovyDataTable<T> extends GenericPanel<T> {
     /**
      * List of entities
      */
-    List<T> list
+    List<T> arrayList
 
     /**
      * ListView that rows are attached at
@@ -57,7 +53,7 @@ class GroovyDataTable<T> extends GenericPanel<T> {
      * Optional
      * Entity retrieve params (see grails docs for method Entity.findById(id, params))
      */
-    Map entityParams
+    Map fetchParams
 
     /**
      * StringResourceKey for headers
@@ -75,14 +71,70 @@ class GroovyDataTable<T> extends GenericPanel<T> {
      * @param closure
      * @return GroovyDataTable
      */
-    def cell(String id,
-             @ClosureParams(value = FromString, options = 'Column')
-             @DelegatesTo(value = Column, strategy = Closure.DELEGATE_FIRST)
-                     Closure closure = null) {
+    GroovyDataTable<T> cell(String id,
+                            @ClosureParams(value = FromString, options = 'wicket.groovy.gems.Column')
+                            @DelegatesTo(value = Column, strategy = Closure.DELEGATE_FIRST)
+                                    Closure closure = null) {
         def column = new Column(id: id)
         closure?.delegate = column
         closure?.call(column)
         columns.add(column)
+        this
+    }
+
+    /**
+     * In many cases you will have probably one
+     * default table in a Panel, when you will include this table
+     * with another component, you can include or rebuild columns
+     *
+     * @param closure
+     */
+    void setInclude(@DelegatesTo(GroovyDataTable) Closure closure) {
+        def clone = closure?.rehydrate(this, closure?.owner, closure?.thisObject)
+        clone?.call(this)
+    }
+
+    /**
+     * In many cases you will have probably one
+     * default table in a Panel, when you will include this table
+     * with another component, you can exclude columns
+     *
+     * @param columns
+     */
+    void setExclude(String... columns) {
+        if (columns?.size() > 0) {
+            this.columns = this.columns.findAll { !(it.id in columns) }.toList()
+        }
+    }
+
+    /**
+     * You can reorder columns in table
+     * @param fields
+     */
+    void reorder(String[] fields) {
+        if (fields) {
+            def fieldList = new HashSet<>(fields.toList()) as List
+            def columnIds = this.columns.collect { it.id }
+            def sortedColumnIds = (columnIds.intersect(fieldList).sort {
+                fieldList.indexOf(it)
+            } + (columnIds - fieldList).sort())
+            def sortedColumns = []
+            sortedColumnIds.each { id ->
+                def column = this.columns.find { it.id == id }
+                column ? sortedColumns << column : null
+            }
+            this.columns = sortedColumns
+        }
+    }
+
+    /**
+     * Shortcut for default cells
+     * @param ids
+     */
+    def cells(String... ids) {
+        ids.each { String id ->
+            cell(id)
+        }
         this
     }
     /**
@@ -99,8 +151,8 @@ class GroovyDataTable<T> extends GenericPanel<T> {
      * @param list
      * @return GroovyDataTable
      */
-    def list(@ClosureParams(value = FromString, options = 'java.lang.Long')Closure<List<T>> list) {
-        this.listClosure = list
+    void list(Closure<List<T>> list) {
+        this.listClosure = list as Closure<List<T>>
     }
 
     /**
@@ -109,7 +161,7 @@ class GroovyDataTable<T> extends GenericPanel<T> {
      * @return
      */
     def list(List<T> list) {
-        this.list = list
+        this.arrayList = list
         this
     }
 
@@ -118,21 +170,21 @@ class GroovyDataTable<T> extends GenericPanel<T> {
         listView('headers', columns) {
             it.label('cell').model(this.stringModel("$headersKey.${(it.modelObject as Column).id}"))
         }
-        list = list ?: listClosure?.call(getPageId())
-        list = list ?: []
-        div('content') {
-            this.content = it as WebMarkupContainer
-            this.rows = listView('rows', this.list as List) {
+        arrayList = arrayList ?: listClosure?.call(getPageId())
+        arrayList = arrayList ?: []
+        this.content = (div('content') {
+            this.rows = listView('rows', this.arrayList) {
                 rowBuild(it)
-            } as ListView<T>
-            this.rows.outputMarkupId = true
-            setOutputMarkupId(true)
-        }
+            }
+            outputMarkupId = true
+        })
+        this.rows.outputMarkupId = true
         this
     }
 
     ListItem rowBuild(ListItem item) {
         item.outputMarkupId = true
+        item.setModel(Model.of(item.getModelObject() as Serializable)) // you should override this to loadable detachable model
         def view = new RepeatingView('cell')
         view.setOutputMarkupId(true)
         this.columns.eachWithIndex { column, i ->
@@ -144,11 +196,19 @@ class GroovyDataTable<T> extends GenericPanel<T> {
             } else {
                 component = (view.label(view.newChildId()).model(item.property(column.id, true)) as Component)
             }
-            column.cssClasses ? component.css(column.cssClasses.call(item.model) as List<String>) : null
+            if (column.modify) {
+                column.modify.call(component)
+            }
+            component?.setEscapeModelStrings(false)
         }
-        item + view
-        rows + item
+        rows + (item + view)
         item
+    }
+
+    @Override
+    protected void onDetach() {
+        super.onDetach()
+        this.arrayList = null
     }
 
     /**
@@ -164,8 +224,8 @@ class GroovyDataTable<T> extends GenericPanel<T> {
                                                  Closure closure) {
         def table = new GroovyDataTable<T>(id)
         table.outputMarkupId = true
-        closure.delegate = table
-        closure(table)
+        closure?.delegate = table
+        closure?.call(table)
         table.build()
     }
 
@@ -173,6 +233,7 @@ class GroovyDataTable<T> extends GenericPanel<T> {
         pageId++
     }
 }
+
 /**
  * GroovyDataTable with infinite scrolling behavior
  */
@@ -184,7 +245,7 @@ class InfiniteScrollDataTable extends GroovyDataTable implements InfiniteScroll 
     static
     final ResourceReference datatableCss = new CssResourceReference(GroovyDataTable, 'GroovyDataTable.css')
 
-    int height = 400
+    int height = 450
 
     @Override
     GroovyDataTable build() {
@@ -193,14 +254,13 @@ class InfiniteScrollDataTable extends GroovyDataTable implements InfiniteScroll 
         "scrollCollapse": true,
         "sScrollY": $height,
         "searching": true,
-        "paging":         false,
+        "paging": false,
         "stripeClasses": [],
         "deferRender": true,
-        "responsive": true
+        "responsive": true,
+        "destroy" : true
         });"""
-        this + new InfiniteScrollBehavior(element: 'tr',
-                list: this.listClosure,
-                headerScript: script)
+        this + new InfiniteScrollBehavior(element: 'tr', list: this.listClosure, headerScript: script)
         this
     }
 
@@ -230,8 +290,9 @@ class InfiniteScrollDataTable extends GroovyDataTable implements InfiniteScroll 
                                                       Closure closure) {
         def table = new InfiniteScrollDataTable(id)
         table.outputMarkupId = true
-        closure.delegate = table
-        closure(table)
+        def clone = closure.rehydrate(table, closure?.owner, closure?.thisObject)
+        clone.resolveStrategy = Closure.DELEGATE_FIRST
+        clone(table)
         table.build() as InfiniteScrollDataTable
     }
 }
@@ -242,19 +303,24 @@ class InfiniteScrollDataTable extends GroovyDataTable implements InfiniteScroll 
 @CompileStatic
 class Column<T> implements Serializable {
     String id
-    Closure<List<String>> cssClasses
     Closure<Component> item
-    boolean visible
+    Closure modify
+    int order
 
-    def item(@DelegatesTo(value = ListItem, strategy = Closure.DELEGATE_FIRST)
-             @ClosureParams(value = FromString, options = ['java.lang.String,org.apache.wicket.model.IModel'])
-                     Closure<Component> closure) {
+    Column<T> item(@DelegatesTo(value = ListItem, strategy = Closure.DELEGATE_FIRST)
+                   @ClosureParams(value = FromString, options = ['java.lang.String,org.apache.wicket.model.IModel'])
+                           Closure<Component> closure) {
         this.item = closure
         this
     }
 
-    def css(@ClosureParams(value = FromString, options = ['org.apache.wicket.model.IModel'])
-                    Closure<List<String>> cssClasses) {
-        this.cssClasses = cssClasses
+    Column<T> modify(@ClosureParams(value = FromString, options = 'org.apache.wicket.Component') Closure closure) {
+        this.modify = closure
+        this
+    }
+
+    Column<T> order(int order) {
+        this.order = order
+        this
     }
 }

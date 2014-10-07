@@ -1,3 +1,5 @@
+
+
 allprojects {
     apply plugin: 'java'
     apply plugin: 'groovy'
@@ -7,7 +9,7 @@ allprojects {
         mavenLocal()
     }
 
-    def groovy = '2.3.6'
+    def groovy = '2.3.7'
     def wicket = '6.16.0'
 
     dependencies {

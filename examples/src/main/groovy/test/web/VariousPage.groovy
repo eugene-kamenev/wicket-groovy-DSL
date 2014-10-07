@@ -1,25 +1,28 @@
 package test.web
 
+import groovy.transform.CompileStatic
+import groovy.transform.InheritConstructors
+import org.apache.wicket.Component
 import org.apache.wicket.ajax.AjaxRequestTarget
 import test.web.components.SimplePanel
 import test.web.components.SimplePanel2
 
+@CompileStatic
+@InheritConstructors
 class VariousPage extends TemplatePage {
-    private int i = 0
-    private String juname
-    private String jup
+    def i = 0
+    def juname
+    def jup
+    Component replacePanel = new SimplePanel('replacePanel').setOutputMarkupId(true)
 
     @Override
-    protected void onInitialize() {
+    void onInitialize() {
         super.onInitialize()
-        def replacePanel = new SimplePanel('replacePanel').setOutputMarkupId(true)
         div('simpleDiv') {
             ajaxLink('ajaxLink') {
                 click { AjaxRequestTarget target ->
-                    this.i++
-                    def newPanel = (this.i % 2 == 0) ? new SimplePanel('replacePanel') : new SimplePanel2('replacePanel')
-                    newPanel.setOutputMarkupId(true)
-                    newPanel = page.get('replacePanel') >> newPanel
+                    def newPanel = new Random().nextBoolean() ? new SimplePanel('replacePanel') : new SimplePanel2('replacePanel')
+                    newPanel = page.get('replacePanel') >> (newPanel as Component)
                     target.add(newPanel)
                 }
             }

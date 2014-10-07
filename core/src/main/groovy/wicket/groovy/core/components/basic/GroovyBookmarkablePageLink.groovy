@@ -9,5 +9,5 @@ import wicket.groovy.core.traits.WicketComponentTrait
  */
 @CompileStatic
 @InheritConstructors
-class GroovyBookmarkablePageLink extends BookmarkablePageLink implements WicketComponentTrait {
+class GroovyBookmarkablePageLink extends BookmarkablePageLink implements WicketComponentTrait<Void> {
 }

@@ -1,10 +1,6 @@
 package wicket.groovy.core.helpers
-
 import groovy.transform.CompileStatic
 
-/**
- * Created by eugene on 8/16/14.
- */
 @CompileStatic
 class TypeSafeModelBuilder {
     String notation = ''
@@ -15,6 +11,13 @@ class TypeSafeModelBuilder {
     }
 
     String getNotation() {
-        notation[0..-2]
+        String last
+        if (this.notation.length() > 1) {
+            last = this.notation[0..-2]
+        } else {
+            last = this.notation
+        }
+        this.notation = ''
+        last
     }
 }

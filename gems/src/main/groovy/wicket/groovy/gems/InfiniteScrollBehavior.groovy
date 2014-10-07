@@ -1,16 +1,13 @@
 package wicket.groovy.gems
-
 import groovy.transform.CompileStatic
 import org.apache.wicket.Component
 import org.apache.wicket.MarkupContainer
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior
 import org.apache.wicket.ajax.AjaxRequestTarget
 import org.apache.wicket.markup.head.IHeaderResponse
-import org.apache.wicket.markup.head.JavaScriptHeaderItem
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem
 import org.apache.wicket.markup.html.list.ListItem
 import org.apache.wicket.markup.html.list.ListView
-
 /**
  * AjaxBehavior for infinite scrolling
  *
@@ -50,7 +47,8 @@ class InfiniteScrollBehavior<T> extends AbstractDefaultAjaxBehavior {
         def script = ''
         appendScript = null
         def markupIds = []
-        this.list.call(scroll.pageId.toInteger()).each { Serializable obj ->
+        this.list = this.list?.rehydrate(null, null, this.list.thisObject)
+        this.list?.call(scroll.pageId.toInteger())?.each { Serializable obj ->
             def item = new ListItem(++scroll.rows.size(), obj.toLoadModel())
             markupIds << "#$item.markupId"
             scroll.rowBuild(item)
@@ -59,9 +57,8 @@ class InfiniteScrollBehavior<T> extends AbstractDefaultAjaxBehavior {
                     "Wicket.\$('$scroll.content.markupId').appendChild(item);"
             target.add(item)
         }
-        if (script.length() > 0) {
-            target.prependJavaScript(script);
-        }
+        script += "\$('#scrollingUpdate').remove();"
+        target.prependJavaScript(script);
         if (markupIds.size() > 0) {
             appendScript = """\$('#$markupId').DataTable().rows.add(\$('${
                 markupIds.join(',')
@@ -79,13 +76,17 @@ class InfiniteScrollBehavior<T> extends AbstractDefaultAjaxBehavior {
     void renderHead(final Component component, final IHeaderResponse response) {
         super.renderHead(component, response)
         def markupId = component.markupId
-        def function = "updateInfiniteScroll${markupId} = " + getCallbackFunction()
-        response.render(JavaScriptHeaderItem.forScript(function, 'scrollingUpdate'));
         def script = """
             var scroller = \$('#${(component as InfiniteScroll).content.markupId}').parent().parent();
                 scroller.scroll(function() {
-            if (scroller.scrollTop() === (scroller[0].scrollHeight - scroller[0].clientHeight) && (scroller.scrollTop() > scroller[0].clientHeight)) {
-                 updateInfiniteScroll${markupId}();
+            if ((scroller.scrollTop() === (scroller[0].scrollHeight - scroller[0].clientHeight)) && scroller[0].scrollHeight >= scroller[0].clientHeight) {
+                 if(\$('#scrollingUpdate').size() <= 0) {
+                    var item = document.createElement('tr');
+                    item.id = 'scrollingUpdate';
+                    \$(item).append('<td colspan="42"><div class="ui center inverted aligned segment" style="min-height: 150px"><i class="huge loading icon"></i></div></td>');
+                    \$('#${(component as InfiniteScroll).content.markupId}').append(\$(item));
+                    ${callbackScript}
+                 }
             }
         }).scroll();
         """
