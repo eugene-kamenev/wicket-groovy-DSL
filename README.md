@@ -16,10 +16,10 @@ But with some little, yet powerful Groovy DSL written, we can extend Wicket to s
     3. Examples - package contains simple examples of dsl-core and gems packages
 
 ###Changelog:
-    0.4 - After working with this DSL in real world applications we found some bugs, fixed them. Improved @CompileStatic support,
-    improved IDE support (Eclipse users can you tell me how it works in?). GroovyDataTable bug fixes. New methods added, see changes in
-    [WicketDSL.groovy](core/src/main/groovy/wicket/groovy/WicketDSL.groovy). All files in examples now are with @CompileStatic annotation.
-    0.3 - Main changes from first version, migrated to groovy extension feature
+0.4 - After working with this DSL in real world applications we found some bugs, fixed them. Improved @CompileStatic support,
+improved IDE support (Eclipse users can you tell me how it works in?). GroovyDataTable bug fixes. New methods added, see changes in
+[WicketDSL.groovy](core/src/main/groovy/wicket/groovy/WicketDSL.groovy). All files in examples now are with @CompileStatic annotation.
+0.3 - Main changes from first version, migrated to groovy extension feature
 ###Usage
 ```groovy
 ...
